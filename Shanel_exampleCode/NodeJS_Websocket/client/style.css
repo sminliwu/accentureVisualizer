@@ -1,0 +1,52 @@
+/* Author(s): Shanel Wu */
+
+body {
+	font-family: "Helvetica", "Helvetica Neue", sans-serif;
+}
+
+h1 {
+	text-align: center;
+}
+
+input {
+	margin: 5px;
+	padding: 5px;
+	border-radius: 5px;
+}
+
+button {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+/* from https://www.w3schools.com/howto/howto_css_two_columns.asp */
+
+.column {
+	float: left;
+	margin-left: 50px;
+}
+
+.left {
+	width: 25%;
+	padding: 10px;
+}
+
+.middle {
+	width: 20%;
+	padding: 10px;
+}
+
+.right {
+	width: 35%;
+	padding: 10px;
+}
+
+#sensor input, #getSQL input {
+	width: 50px;
+	background-color: #EEEEEE;
+}

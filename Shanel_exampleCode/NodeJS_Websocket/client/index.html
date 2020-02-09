@@ -1,0 +1,98 @@
+<!-- index.html
+  Original code source: https://os.mbed.com/cookbook/Websockets-Server
+  Modified by: Shanel Wu
+	-->
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EID Project 2: Temperature/Humidity Client</title>
+ 	  <link rel ="stylesheet" href="style.css">
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.553.0.min.js"></script>
+    <script src="client.js"></script>
+  </head>
+  <body>
+    <div class="row">
+      <h1>Temperature/Humidity Client</h1>
+      <div class="column left">
+      	<h2>Connect to Python server</h2>
+        <div id="connection_details_py">
+          <label for="host">host:</label>
+          <input type="text" id="host" value="192.168.7.29" style="background:#ff0000;"/><br />
+          <label for="port">port:</label>
+          <input type="text" id="port" value="8888" style="background:#ff0000;"/><br />
+<!--          <label for="uri">uri:</label>
+          <input type="text" id="uri" value="/ws" style="background:#ff0000;"/><br /> 
+        -->
+          <button type="submit" id="open" value="open">Open</button>
+        </div>
+      	<h2>Connect to Node.js server</h2>
+        <div id="connection_details_js">
+          <label for="host">host:</label>
+          <input type="text" id="host2" value="192.168.7.29" style="background:#ff0000;"/><br />
+          <label for="port">port:</label>
+          <input type="text" id="port2" value="8080" style="background:#ff0000;"/><br />
+<!--          <label for="uri">uri:</label>
+          <input type="text" id="uri2" value="/ws" style="background:#ff0000;"/><br />
+        -->
+          <button type="submit" id="open2" value="open2">Open</button>
+        </div>
+        <div id="error">
+        </div>
+      </div>
+      <div class="column middle">
+        <h2>Test</h2>
+        <div id="message_details">
+            <label for="message">message:</label>
+            <input type="text" id="message" value="Hello World!"/>
+            <button type="submit" id="send" value="send">Python</button>
+            <button type="submit" id="send2" value="send2">Node.JS</button>
+        </div>
+
+        <h2>Servers</h2>
+        <div id="sensor">
+        	<button type="submit" id="read" value="read">Read Sensor</button>
+        </div>
+        <div id="latestStored">
+        	<button type="submit" id="get" value="get">Get Latest Stored Reading</button> 
+        </div>
+        <div id="convertFC">
+        	<button type="submit" id="switch" value="switch">Switch F/C</button>
+        </div>
+        <div id="network">
+        	<a href="http://128.138.189.237:8081"><button type="submit" id="network" value="network">Test Network</button></a>
+        </div>
+      </div>
+      <div class="column right" id="display">
+        <div id="units"></div>
+        <div id="sensor">
+          <h3>Sensor</h3>
+          <label for="currTemp">Current temperature:</label>
+          <input type="number" readonly="true" value="0">
+          <label for="currHum">Current temperature:</label>
+          <input type="number" readonly="true" value="0">
+        </div>
+        <div id="getSQL">
+          <h3>Database</h3>
+          <label for="currTemp">Recorded temperature:</label>
+          <input type="number" readonly="true" value="0">
+          <label for="currHum">Recorded temperature:</label>
+          <input type="number" readonly="true" value="0">
+        </div>
+        <div id="storage">
+          <a href="http://128.138.189.237:8081"><h3>Latency Test</h3></a>
+        </div>
+        <div id="graph">
+          <h3>Graphs</h3>
+          <div id="tempGraph"></div>
+          <div id="humGraph"></div>
+        </div>
+        <h4>Terminal</h4>
+        <div id="terminal">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,69 @@
+<!-- index.html
+  Original code source: https://os.mbed.com/cookbook/Websockets-Server
+  Modified by: Shanel Wu
+  -->
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EID Project 3: Temperature/Humidity Client via AWS</title>
+    <link rel ="stylesheet" href="style.css">
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.554.0.min.js"></script>
+    <script src="client.js"></script>
+  </head>
+  <body>
+    <div class="row">
+      <h1>Temperature/Humidity Client</h1>
+      <div class="column left">
+        <h2>Connection to AWS</h2>
+        <div id="connection_details_aws">
+          <label for="url">URL:</label>
+          <input type="text" id="aws" value="" style="background:#ff0000;"/><br />
+          <button type="submit" id="open" value="open">Open</button>
+        </div>
+        <div id="error">
+        </div>
+
+        <h2>Servers</h2>
+        <div id="message_details">
+            <label for="message">message:</label>
+            <input type="text" id="message" value="Hello World!"/>
+            <button type="submit" id="send" value="send">Send</button>
+        </div>
+        <div id="getOne">
+          <button type="submit" id="getOne" value="getOne">Get</button> 
+        </div>
+        <div id="getAll">
+          <button type="submit" id="getAll" value="getAll">Get All</button> 
+        </div>
+        <div id="convertFC">
+          <button type="submit" id="switch" value="switch">Switch to C</button>
+        </div>
+        <div id="queue">
+          <button type="submit" id="queue" value="queue">Show Queue Count</button>
+        </div>
+      </div>
+
+      <div class="column right" id="display">
+        <div>
+          <span id="latest">
+            <label for="currTemp">Temperature:</label>
+            <input id="currTemp" type="text" readonly="true" value="0 &deg;F">
+            <label for="currHum">Humidity:</label>
+            <input id="currHum" type="text" readonly="true" value="0 &#37;">
+          </span>
+          <span id="queueCount"></span>
+        </div>
+
+        <div id="feed">
+        </div>
+        
+        <h4>Terminal</h4>
+        <div id="terminal">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
