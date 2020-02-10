@@ -7,12 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accenture Visualizer</title>
     <style> body {padding: 0; margin: 0;} </style>
-    <script src="p5.js"></script>
-    <script src="./addons/p5.dom.min.js"></script>
+    
+    <!-- Websockets, etc. scripts -->
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+    <script src="./client.js"></script>
+  
+
+    <!-- P5 scripts -->
+    <script src="./public/p5/p5.js"></script>
+    <script src="./public/p5/p5.dom.min.js"></script>
     <!-- <script src="ChangingColorsVis.js"></script> -->
     <!-- <script src="GradientVis.js"></script> -->
-    <script src="BoundedMorphVis.js"></script>
+    <script src="./public/BoundedMorphVis.js"></script>
   </head>
   <body>
+    <h1>I am a Client</h1>
   </body>
 </html>

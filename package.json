@@ -1,0 +1,24 @@
+{
+  "name": "woventextilevisualizer",
+  "version": "1.0.0",
+  "description": "npm package for Accenture woven textile visualizer",
+  "main": "websocket.js",
+  "scripts": {
+    "test": "node websocket.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sminliwu/wovenTextileVisualizer.git"
+  },
+  "author": "Emma Goodwill and Shanel Wu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sminliwu/wovenTextileVisualizer/issues"
+  },
+  "homepage": "https://github.com/sminliwu/wovenTextileVisualizer#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "p5": "^0.10.2",
+    "socket.io": "^2.3.0"
+  }
+}
