@@ -7,25 +7,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accenture Visualizer</title>
     <style> body {padding: 0; margin: 0;} </style>
-    <!-- P5 scripts -->
-    <script src="./p5/p5.js"></script>
-    <script src="/p5/p5.dom.min.js"></script>
-    <!-- <script src="ChangingColorsVis.js"></script> -->
-    <!-- <script src="GradientVis.js"></script> -->
-    <script src="BoundedMorphVis.js"></script>
 
     <!-- Websockets, etc. scripts -->
     <script src="http://code.jquery.com/jquery.min.js"></script>
     <script src="socket.io/socket.io.js"></script>
-    <script>
-      socket = io();
-      function keyPressed() {
-        console.log("pressed a key on server");
-        socket.emit('serverKey', 'pressed a key on server');
-      }
-    </script>
+    <!-- <script src="clientFromServer.js"></script> -->
+
+    <!-- P5 scripts -->
+    <script src="/p5/p5.js"></script>
+    <script src="/p5/p5.dom.min.js"></script>
+    <!-- <script src="ChangingColorsVis.js"></script> -->
+    <!-- <script src="GradientVis.js"></script> -->
+    <script src="BoundedMorphVis.js"></script>
   </head>
   <body>
-    <h1>Hello from the server side</h1>
+    <div id='title'>
+      <h1>Hello from the server side</h1>
+    </div>
+
+    <div id='sketch'></div>
+
+    <div id='footer'>
+      <h2>This text should be underneath the P5 sketch</h2>
+    </div>
   </body>
 </html>
