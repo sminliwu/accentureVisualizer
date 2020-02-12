@@ -5,6 +5,8 @@ var tracking;
 let green;
 var data = 1023;
 
+// var io = requirejs(['testServer/node_modules/socket.io-client/dist/socket.io.js']);
+// var p5 = requirejs(['testServer/public/p5/p5.js']);
 var socket;
 
 let sketch = function(p) {
@@ -67,23 +69,6 @@ let sketch = function(p) {
       p.fill(255,green,0);
       p.rect(p.width/2,p.height/2,300,200);
     }
-    // if (p.mouseIsPressed) {
-    //   //transforms the force data to be comparable with green in the range of 0 to 230
-    //   var transformedForce = transformForceColor(data);
-    //   //adjusts green if needed
-    //   if (green > transformedForce + 2) {
-    //     green -= 3;
-    //   }
-    //   matchData(data);
-    // } else {
-    //   transformes the force data to be comparable with green on a scale of 0-230
-    //   var transformedForce = transformForceColor(0);
-    //   if (green < transformedForce - 2) {
-    //     //adjusts green if needed
-    //     green += 3;
-    //   }
-    //   matchData(0);
-    // }
     p.listenData(data);
   }
 
@@ -224,6 +209,7 @@ let sketch = function(p) {
 
 let vis = new p5(sketch); // can call p5 functions as vis.function()
 
+// open socket after everything P5 is ready
 socket = io();
 
 socket.on('reading', function(packet) {

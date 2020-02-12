@@ -7,13 +7,14 @@ var DummyData = require('./dummyInput.js');
 var port = 5000; // test server port
 
 // NodeJS example of websocket stopwatch: https://github.com/robdodson/defcon/blob/master/models/stopwatch.js
-// use this for a continuously broadcasting dummy server
+// used this for a continuously broadcasting dummy server
 
-app.use(express.static('public'));
+// uncomment to serve a webpage
+// app.use(express.static('public'));
 
-app.get('/', function(req, res) {
-	res.sendFile(__dirname + '/index.html');
-});
+// app.get('/', function(req, res) {
+// 	res.sendFile(__dirname + '/index.html');
+// });
 
 http.listen(port);
 http.on('listening', function() {
@@ -27,7 +28,7 @@ var dummy = new DummyData();
 
 dummy.on('tick:DummyData', function(reading) {
   io.sockets.emit('reading', { reading: reading });
-  if (reading % 100 == 0) {
+  if (reading % 100 == 0 && reading != 0) {
       console.log(reading);
   }
 });

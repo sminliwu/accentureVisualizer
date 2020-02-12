@@ -1,4 +1,5 @@
 // Dummy server ref code - https://github.com/robdodson/defcon/blob/master/models/Stopwatch.js
+// Modified by Shanel
 
 var util    = require('util'),
     events  = require('events')
@@ -14,14 +15,13 @@ function DummyData() {
 
     this.second = 1000;
     this.time = 0;
-    this.reading = 1000; // simple coundown from 60 right now
+    this.reading = 1200; // simple coundown from 60 right now
     this.pattern = undefined;
     this.interval = undefined;
 
     events.EventEmitter.call(this);
 
-    // Use Underscore to bind all of our methods
-    // to the proper context
+    // list out all of the prototype functions
     _.bindAll(this, 'start', 'stop', 'onTick', 'formatTime', 'getReading');
 };
 
@@ -57,31 +57,27 @@ DummyData.prototype.stop = function() {
 
 DummyData.prototype.reset = function() {
     console.log('Resetting DummyData!');
-    this.reading = 1000;
+    this.reading = 1200;
     this.emit('reset:DummyData', this.formatTime(this.time));
 };
 
+// Most of Shanel's changes from source code here
 DummyData.prototype.onTick = function() {
+    // keep this time count running
     this.time += 1;
 
+    // pattern: steadily decreasing drop
     if (this.reading > 0) {
-        this.reading -= 1;
+        this.reading -= 5; // rate of change of drop
     }
  
     this.emit('tick:DummyData', this.reading);
 
-    if (this.time % 2000 == 0) {
+    // stay at 0 for a bit, then reset
+    if (this.time % 300 == 0) {
         this.reset();
         this.start();
     }
-
-
-    //var formattedTime = this.formatTime(this.time);
-   
-    
-    // if (this.reading === 0) {
-        
-    // }
 };
 
 DummyData.prototype.formatTime = function(time) {

@@ -9,20 +9,16 @@
     <style> body {padding: 0; margin: 0;} </style>
     
     <!-- Websockets, etc. scripts -->
-    <script src="http://code.jquery.com/jquery.min.js"></script>
-    <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
-    <script src="./client.js"></script>
+    <script data-main="./clientVis.js" src="scripts/require.js"></script>
   
     <!-- P5 scripts -->
-    <script src="./public/p5/p5.js"></script>
-    <script src="./public/p5/p5.dom.min.js"></script>
     <!-- <script src="ChangingColorsVis.js"></script> -->
     <!-- <script src="GradientVis.js"></script> -->
-    <script src="./public/BoundedMorphVis.js"></script>
+    <!-- <script src="BoundedMorphVis.js"></script> -->
   </head>
   <body>
     <div id='title'>
-      <h1>I am a Client</h1>
+      <h1>I am a client not from the server</h1>
     </div>
 
     <div id='sketch'></div>
