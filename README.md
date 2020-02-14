@@ -30,14 +30,20 @@ Make sure network filters allow access.... (TO DO)
 
 Make sure the tablet is connected to the same network.
 
+Match the IP in the Processing Sketch to the same IP used in the WebSocketServer.ino
+
 
 Step 4: 
-Go to http://unstable.design...yadda yadda 
+Go to http://unstable.design/accentureVisualizer/testServer/public/ 
 
 
 TO DO - 
-Solve ESP Crashing (Emma)
-Get Unstable.Design listening to the web socket?  (Laura + Shanel)
+EMMA -  debug ESP crash, start publishing to socket from ESP
 
+SHANEL - getting code to listen to the socket from P5
+
+LAURA - udpate P5 Interface + Read from log files
+      - P5 to write log files
+       - template log available in public folder
 
 

@@ -1,11 +1,6 @@
+//LAURA OWNS THIS FILE 
+//TO DO: READING/WRITING IS BROKEN 
 
-  // open socket after everything P5 is ready
-let  socket = io('http://192.168.0.4:5000');
-
-  socket.on('reading', function(packet) {
-    console.log(JSON.stringify(packet));
-    data = packet['reading'];
-  });
 var top_text_line = 30;
 var reg_top = 90;
 var  color_value = [230, 230, 230, 230, 230, 230];
@@ -18,17 +13,7 @@ var  d_log;
 
 function setup() {
 
-  let url = 'https://jsonplaceholder.typicode.com/posts';
-  let postData = { userId: 1, title: 'p5 Clicked!', body: 'p5.js is way cool.' };
-
-  httpPost(url, 'json', postData, function(result) {
-      strokeWeight(2);
-      stroke(r, g, b);
-      fill(r, g, b, 127);
-      ellipse(mouseX, mouseY, 200, 200);
-      text(result.body, mouseX, mouseY);
-    });
-    
+ 
 
   createCanvas(1024,768);
 
@@ -43,7 +28,7 @@ function setup() {
   // header.position(0, 50);
   // header.size(1024, 100);
   d_log = new p5.Table();
-  d_log.addColumn('timestamp');
+//  d_log.addColumn('timestamp');
   d_log.addColumn('region');
   d_log.addColumn('value');
   readLog();
@@ -190,7 +175,7 @@ function hasData(data){
   timestamp = y+":"+m+":"+d+":"+h+":"+mi+":"+s;
 
   let newRow = d_log.addRow();
-  newRow.setString('timestamp', timestamp);
+  //newRow.setString('timestamp', timestamp);
   newRow.setNum('region', data.region);
   newRow.setNum('value', data.scale);
 
@@ -204,20 +189,8 @@ function readLog(){
   console.log("Reading Log");
   d_log = loadTable('log.csv', 'csv', 'header');
   console.log(d_log);
-
-  print(d_log.getRowCount() + ' total rows in table');
-  print(d_log.getColumnCount() + ' total columns in table');
-
-  print(d_log.getColumn('name'));
-  //["Goat", "Leopard", "Zebra"]
-
-  //cycle through the table
-  for (let r = 0; r < d_log.getRowCount(); r++)
-    for (let c = 0; c < d_log.getColumnCount(); c++) {
-      print(d_log.getString(r, c));
-    }
 }
-
+  
 
 
  function loadHistory(){
@@ -239,7 +212,6 @@ function swapToPastMode() {
   button_present.style('background-color', "#000");
   button_present.style('color', "#fff");
 
-   saveTable(d_log, 'log.csv');
 }
 
 function swapToPresentMode(){
@@ -268,6 +240,5 @@ function matchColor(region, forceData) {
 function transformForce(forceData){
    var toScale = (1023-forceData)*0.2248289345;
    return int(toScale);
-}
 }
 
