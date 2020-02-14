@@ -1,5 +1,6 @@
 <!-- webpage hosting P5.js sketch and websocket connection -->
 
+
 <!DOCTYPE html>
 <html lang="">
   <head>
@@ -7,28 +8,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accenture Visualizer</title>
     <style> body {padding: 0; margin: 0;} </style>
-
+    
+ 
     <!-- Websockets, etc. scripts -->
-    <script src="http://code.jquery.com/jquery.min.js"></script>
-    <script src="socket.io/socket.io.js"></script>
-    <!-- <script src="clientFromServer.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 
     <!-- P5 scripts -->
-    <script src="/p5/p5.js"></script>
-    <script src="/p5/p5.dom.min.js"></script>
-    <!-- <script src="ChangingColorsVis.js"></script> -->
-    <!-- <script src="GradientVis.js"></script> -->
-    <script src="BoundedMorphVis.js"></script>
-  </head>
+    <script src="scripts/p5.js"></script>
+    <script src="scripts/p5.dom.min.js"></script>
+    <script src="pressMorphVis.js"></script>
+    <!--<script data-main="./clientVis.js" src="scripts/require.js"></script>-->
+ </head>
   <body>
-    <div id='title'>
-      <h1>Hello from the server side</h1>
-    </div>
+   <div id='sketch'></div>
 
-    <div id='sketch'></div>
 
-    <div id='footer'>
-      <h2>This text should be underneath the P5 sketch</h2>
-    </div>
   </body>
 </html>

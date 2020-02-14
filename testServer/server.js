@@ -10,15 +10,19 @@ var port = 5000; // test server port
 // used this for a continuously broadcasting dummy server
 
 // uncomment to serve a webpage
-// app.use(express.static('public'));
+app.use(express.static('public'));
 
 // app.get('/', function(req, res) {
 // 	res.sendFile(__dirname + '/index.html');
 // });
 
+var os = require('os')
 http.listen(port);
 http.on('listening', function() {
-	var myIP = require('os').networkInterfaces()['Wi-Fi'][1]['address'];
+	console.log('starting')
+	const interfaces = os.networkInterfaces()
+	console.log('interfaces', JSON.stringify(interfaces, null, 2))
+	var myIP = interfaces['en0'][1]['address'];
 	console.log('Hosting server from ' + myIP + ':' + port);
 });
 
@@ -33,8 +37,7 @@ dummy.on('tick:DummyData', function(reading) {
   }
 });
 
-dummy.start();
-
+dummy.start(); 
 io.on('connection', function (socket) {
   let handshake = socket.handshake;
   console.log("New connection from " + handshake['address']);
@@ -56,3 +59,4 @@ io.on('connection', function (socket) {
   });
 
 });
+

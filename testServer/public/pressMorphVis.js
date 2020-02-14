@@ -6,6 +6,15 @@ var  bg_fill = 255;
 var view_mode = "present";
 
 
+  // open socket after everything P5 is ready
+let  socket = io('http://192.168.0.4:5000');
+
+  socket.on('reading', function(packet) {
+    console.log(JSON.stringify(packet));
+    data = packet['reading'];
+  });
+}
+
 
 function setup() {
   createCanvas(1024,768);
@@ -16,10 +25,10 @@ function setup() {
   rect(0, 0, 1024, 768);
 
 
-  // header = createDiv();
-  // header.parent("sketch");
-  // header.position(0, 50);
-  // header.size(1024, 100);
+   header = createDiv();
+   header.parent("sketch");
+   header.position(0, 50);
+   header.size(1024, 100);
 
 
   title = createDiv("A Fabric that Remembers");

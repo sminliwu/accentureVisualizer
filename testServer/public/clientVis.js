@@ -15,21 +15,22 @@ requirejs.config({
     //never includes a ".js" extension since
     //the paths config could be for a directory.
     paths: {
-      jquery: 'http://code.jquery.com/jquery.min',
-      'socket.io': 'testServer/node_modules/socket.io-client/dist/socket.io',
-      p5: 'testServer/public/p5/p5'
+      jquery: 'https://code.jquery.com/jquery-3.4.1.min',
+      'socket.io': 'https://cdn.socket.io/socket.io-1.4.5',
+      p5: 'scripts/p5',
+      p5dom: 'scripts/p5.dom.min',
+      sketch: 'pressMorphVis'
     }
 });
 
 // Start the main app logic.
-requirejs(['jquery', 'socket.io', 'p5'],
-function   ($,        io,   p5) {
+requirejs(['jquery', 'socket.io', 'p5','p5dom', 'sketch'],
+function   ($, io,   p5, p5dom, sketch) {
     // modules all loaded and can be used here now.
 
-  //var io = requirejs(['testServer/node_modules/socket.io-client/dist/socket.io.js']);
-  //var p5 = requirejs(['testServer/public/p5/p5.js']);
   var socket;
 
+/*
   let sketch = function(p) {
     p.setup = function() {
       p.rectMode(p.CENTER);
@@ -229,8 +230,11 @@ function   ($,        io,   p5) {
       return p.int(scaled);
     }
   }
+*/
 
   let vis = new p5(sketch); // can call p5 functions as vis.function()
+
+
 
   // open socket after everything P5 is ready
   socket = io('http://192.168.0.4:5000');

@@ -7,18 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accenture Visualizer</title>
     <style> body {padding: 0; margin: 0;} </style>
-    
+
     <!-- Websockets, etc. scripts -->
-    <script data-main="./clientVis.js" src="scripts/require.js"></script>
-  
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+    <!-- <script src="clientFromServer.js"></script> -->
+
     <!-- P5 scripts -->
+    <script src="p5.js"></script>
+    <script src="p5.dom.min.js"></script>
     <!-- <script src="ChangingColorsVis.js"></script> -->
     <!-- <script src="GradientVis.js"></script> -->
-    <!-- <script src="BoundedMorphVis.js"></script> -->
+    <script src="BoundedMorphVis.js"></script>
   </head>
   <body>
     <div id='title'>
-      <h1>I am a client not from the server</h1>
+      <h1>Hello from the server side</h1>
     </div>
 
     <div id='sketch'></div>
@@ -26,6 +30,5 @@
     <div id='footer'>
       <h2>This text should be underneath the P5 sketch</h2>
     </div>
-
   </body>
 </html>
