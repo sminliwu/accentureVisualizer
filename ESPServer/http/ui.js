@@ -7,12 +7,14 @@ var  history_value = [230, 230, 230, 230, 230, 230];
 var  bg_fill = 255;
 var  view_mode = "present";
 var  d_log;
+var history_resolution = 10;
 
 
 
 function setup() {
 
- 
+   //calculateLocalStoreUsage();
+   loadRawLog();
 
   createCanvas(1024,768);
 
@@ -31,8 +33,6 @@ function setup() {
   d_log.addColumn('region');
   d_log.addColumn('value');
   
-readLog();
-
 
   title = createDiv("A Fabric that Remembers");
   title.style('font-family', 'avenir');
@@ -115,10 +115,7 @@ function draw() {
  
   //now create a key on the lower corner; 
   push();
-
   translate(800, 575);
-
-
   fill(0);
   noStroke();
   textSize(12);
@@ -137,14 +134,19 @@ function draw() {
 
 
    if(mouseIsPressed) {
-     hasData({region: 0, scale: 3});
-     hasData({region: 3, scale: 0});
-
+	   	 console.log("mouse Press");
+	     hasData({region: 1, scale: 10});
+	     hasData({region: 2, scale: 9});
+	     hasData({region: 4, scale: 8});
    } else {
-     hasData({region: 0, scale: 0});
-     hasData({region: 3, scale: 10});
-
+	    	hasNoData(0);
+	      hasNoData(1);
+	      hasNoData(2);
+	      hasNoData(3);
+	      hasNoData(4);
+      	hasNoData(5);
    }
+
 }
 
 
@@ -152,10 +154,6 @@ function draw() {
 
 //placeholder for the incoming data from the web socket
 function hasData(data){
-
-
-  //only write the present data if we are in the live view mode
-
   //data.scale will be a number from 0-10
   //must map scale to a range from 0-1023
   var color_target = data.scale * (1023/10);
@@ -163,37 +161,33 @@ function hasData(data){
   logData(data);
 }
 
- function logData(data){
-  //input code to write this to a data log
-  let timestamp = "";
-  let y = year();
-  let m = month();
-  let d = day();
-  let h = hour();
-  let mi = minute();
-  let s = second(); //only write what the last value was within the current second.
-  timestamp = y+":"+m+":"+d+":"+h+":"+mi+":"+s;
 
-  let newRow = d_log.addRow();
-  //newRow.setString('timestamp', timestamp);
-  newRow.setNum('region', data.region);
-  newRow.setNum('value', data.scale);
-
-
-
- }
-
-//called form DOM onLoad
- //loads all previous data collected from other instances of running
-function readLog(){
-  console.log("Reading Log");
-  //d_log = loadTable('log.csv', 'csv', 'header');
-  //console.log(d_log);
+function hasNoData(region){
+  //data.scale will be a number from 0-10
+  //must map scale to a range from 0-1023
+  var color_target = 0;
+  matchColor(region, color_target);
 }
-  
+
 
 
  function loadHistory(){
+
+ 	//this function should show the total accumulated force within the time window saved.
+   var d_log = [];
+   d_log = loadRawLog();
+   if(d_log.length > 1){
+
+   	var oldest_stamp = (d_log[0]).timestamp;
+   	var newest_stamp = (d_log[d_log.length-1]).timestamp;
+   	console.log(oldest_stamp, newest_stamp);
+
+   	var elapsed = newest_stamp - oldest_stamp;
+   	var time_window = elapsed / history_resolution; 
+ 	
+	}
+
+
   //somehow read the history in and populate the most and least presssed regions (for now)
   /// write history values here
   //var  history_value = [230, 230, 230, 230, 230, 230];
@@ -211,6 +205,8 @@ function swapToPastMode() {
 
   button_present.style('background-color', "#000");
   button_present.style('color', "#fff");
+
+  loadHistory();
 
 }
 
