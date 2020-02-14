@@ -15,3 +15,9 @@ var connection = new WebSocket('ws://'+ location.hostname +':81/', ['arduino']);
   connection.onclose = function () {
     console.log('WebSocket connection closed');
   };
+
+  
+
+
+
+
