@@ -1,5 +1,30 @@
-//point to whatever IP we set
-
-//Loads code//
+<!-- WEBPAGE LOADING HTML / JS for the Visualization -->
 
 
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Fabric that Remembers</title>
+    <style> body {padding: 0; margin: 0;} </style>
+    
+</head>
+  <body>
+   <div id='sketch'></div>
+ 
+    <!-- Websockets, etc. scripts -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+    <!-- P5 scripts -->
+    <script src="scripts/p5.js"></script>
+    <script src="scripts/p5.dom.min.js"></script>
+    <script src="ui.js"></script>
+    <script src="log.js"></script>
+    <script src="client.js"></script>
+    <!--<script data-main="./clientVis.js" src="scripts/require.js"></script>-->
+ 
+
+  </body>
+</html>
