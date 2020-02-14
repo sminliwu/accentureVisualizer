@@ -9,11 +9,7 @@ var data = 0;
 requirejs.config({
     //By default load any module IDs from
     baseUrl: '.',
-    //except, if the module ID starts with "app",
-    //load it from the js/app directory. paths
-    //config is relative to the baseUrl, and
-    //never includes a ".js" extension since
-    //the paths config could be for a directory.
+    // paths should never include a ".js" extension since the paths config could be for a directory. 'socket.io' needs to be in a string because of the dot.
     paths: {
       jquery: 'https://code.jquery.com/jquery-3.4.1.min',
       'socket.io': 'https://cdn.socket.io/socket.io-1.4.5',
@@ -24,9 +20,15 @@ requirejs.config({
 });
 
 // Start the main app logic.
+<<<<<<< HEAD:testServer/public/clientVis.js
 requirejs(['jquery', 'socket.io', 'p5','p5dom', 'sketch'],
 function   ($, io,   p5, p5dom, sketch) {
     // modules all loaded and can be used here now.
+=======
+requirejs(['jquery',  'socket.io',  'p5'],
+function   ($,         io,           p5) {
+  // modules all loaded and can be used here now.
+>>>>>>> 23016fb5f765e7a39b6724c23c8d8a2b7101dfb6:clientVis.js
 
   var socket;
 
@@ -97,24 +99,26 @@ function   ($, io,   p5, p5dom, sketch) {
     p.mousePressed = function() {
       //console.log("mousePressed");
       //transforms the force data to be comparable with green in the range of 0 to 230
+      data = 1023;
       var transformedForce = transformForceColor(data);
       //adjusts green if needed
       if (green > transformedForce + 2) {
         green -= 3;
       }
-      data = 1023;
       matchData(data);
+      return false; // disables default browser behavior, like highlighting text
     }
 
     p.mouseReleased = function() {
       //transformes the force data to be comparable with green on a scale of 0-230
-      var transformedForce = transformForceColor(0);
+      data = 0;
+      var transformedForce = transformForceColor(data);
       if (green < transformedForce - 2) {
         //adjusts green if needed
         green += 3;
       }
-      data = 0;
       matchData(data);
+      return false;
     }
 
     p.listenData = function(data) {
@@ -234,13 +238,41 @@ function   ($, io,   p5, p5dom, sketch) {
 
   let vis = new p5(sketch); // can call p5 functions as vis.function()
 
+<<<<<<< HEAD:testServer/public/clientVis.js
 
+=======
+  var IP = "192.168.0.109"; // BTU
+  // var IP = "192.168.0.4"; // home wifi
+>>>>>>> 23016fb5f765e7a39b6724c23c8d8a2b7101dfb6:clientVis.js
 
   // open socket after everything P5 is ready
-  socket = io('http://192.168.0.4:5000');
+  // socket = io('http://192.168.0.4:5000');
 
+  // socket.on('reading', function(packet) {
+  //   console.log(JSON.stringify(packet));
+  //   data = packet['reading'];
+  // });
+
+  var connection = new WebSocket('ws://'+IP+':81/', ['arduino']);
+  connection.onopen = function () {
+    connection.send('Connect ' + new Date());
+  };
+  connection.onerror = function (error) {
+    console.log('WebSocket Error ', error);
+  };
+  connection.onmessage = function (e) {
+    console.log('Server: ', e.data);
+  };
+  connection.onclose = function () {
+    console.log('WebSocket connection closed');
+  };
+
+<<<<<<< HEAD:testServer/public/clientVis.js
   socket.on('reading', function(packet) {
     console.log(JSON.stringify(packet));
     data = packet['reading'];
   });
 });
+=======
+});
+>>>>>>> 23016fb5f765e7a39b6724c23c8d8a2b7101dfb6:clientVis.js
