@@ -21,17 +21,8 @@ var LOGMAX = 650000;
 
   //get date in seconds
   var timestamp = Math.floor(Date.now() / 1000);
-
-  //input code to write this to a data log
-  // let timestamp = "";
-  // let y = year();
-  // let m = month();
-  // let d = day();
-  // let h = hour();
-  // let mi = minute();
-  // let s = second(); //only write what the last value was within the current second.
-  // timestamp = y+":"+m+":"+d+":"+h+":"+mi+":"+s;
-  let value = data.region+","+data.scale;
+  timestamp = timestamp+":"+data.region
+  let value = data.scale;
 
 
   //pop the last value from the list and write a new one. 
@@ -87,16 +78,16 @@ function loadRawLog(){
 
 	for(var x in localStorage) {
 		if(typeof(localStorage[x]) == "string"){
-			values = split(localStorage[x], ",");
+			time_region = split(x, ":")
+			value = localStorage[x];
 
 			d_log.push({
-			timestamp: x,
-			region: values[0],
-			value: values[1]
-		});
+			timestamp: time_region[0],
+			region: time_region[1],
+			value: value}
+		);
 		}
 	}
-
 
 	return d_log;
 

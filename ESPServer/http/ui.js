@@ -6,15 +6,21 @@ var  color_value = [230, 230, 230, 230, 230, 230];
 var  history_value = [230, 230, 230, 230, 230, 230];
 var  bg_fill = 255;
 var  view_mode = "present";
-var  d_log;
-var history_resolution = 10;
+var  history_resolution = 10;
+var  fp_timewindow = {
+	history: [],
+	max: 0
+};
+var  reg_timewindow = {
+	history: [],
+	max: 0
+};
 
 
 
 function setup() {
 
    //calculateLocalStoreUsage();
-   loadRawLog();
 
   createCanvas(1024,768);
 
@@ -68,6 +74,11 @@ function setup() {
   footer.size(1024, 200);
 
 
+   history_slider = createSlider(0, 255, 100);
+   history_slider.position(30, 700);
+   history_slider.style("width", "600px");
+
+
 
 
 
@@ -112,10 +123,13 @@ function draw() {
   rect(802,344+reg_top,pressreg_w,pressreg_h);
 
 
+
+  //create the sliding 
+
  
   //now create a key on the lower corner; 
   push();
-  translate(800, 575);
+  translate(800, 680);
   fill(0);
   noStroke();
   textSize(12);
@@ -135,9 +149,9 @@ function draw() {
 
    if(mouseIsPressed) {
 	   	 console.log("mouse Press");
-	     hasData({region: 1, scale: 10});
-	     hasData({region: 2, scale: 9});
-	     hasData({region: 4, scale: 8});
+	     hasData({region: 2, scale: 10});
+	     hasData({region: 3, scale: 6});
+	     hasData({region: 4, scale: 10});
    } else {
 	    	hasNoData(0);
 	      hasNoData(1);
@@ -173,19 +187,86 @@ function hasNoData(region){
 
  function loadHistory(){
 
+ 	reg_timewindow.history = [];
+ 	reg_timewindow.max = 0;
+
+ 	fp_timewindow.history = [];
+ 	fp_timewindow.max = 0;
+
+ 	//CALCULATE FORCE PER TIME WINDOW
+ 	for(var i = 0; i <= history_resolution; i++){
+ 		//cumulative values for region plus total
+ 		fp_timewindow.history[i] = [0, 0,0,0, 0,0, 0];
+ 		if(i < 6) reg_timewindow.history[i] = [0, 0, 0,0,0,0,0,0,0,0, 0]; //this is bad form, but for now
+ 	}
+
+ 	console.log(reg_timewindow);
+
+
+
+
  	//this function should show the total accumulated force within the time window saved.
    var d_log = [];
    d_log = loadRawLog();
-   if(d_log.length > 1){
 
-   	var oldest_stamp = (d_log[0]).timestamp;
-   	var newest_stamp = (d_log[d_log.length-1]).timestamp;
+
+	var oldest_stamp = d_log[0].timestamp;
+   	var newest_stamp =   d_log[0].timestamp
+
+	for(var d in d_log){
+		if(d_log[d].timestamp > newest_stamp) newest_stamp = d_log[d].timestamp;
+		if(d_log[d].timestamp < oldest_stamp) oldest_stamp = d_log[d].timestamp;
+	}
+
    	console.log(oldest_stamp, newest_stamp);
 
    	var elapsed = newest_stamp - oldest_stamp;
    	var time_window = elapsed / history_resolution; 
+ 
+
+   	//does not require values ot be in order
+   	//writes an array of [time window][region][total force within time region]
+   	for(var d in d_log){
+   		var time_diff = d_log[d].timestamp - oldest_stamp;
+   		var cur_window = int((d_log[d].timestamp - oldest_stamp) / time_window);
+
+
+   		window_array = fp_timewindow.history[cur_window];
+   	   	window_array[d_log[d].region] = int(window_array[d_log[d].region]) +int(d_log[d].value);  
+
+   	   	region_array =  reg_timewindow.history[d_log[d].region];
+   	   	region_array[cur_window] = int(region_array[d_log[d].region]) + int(d_log[d].value);
+
+
+   	}
+
+
+   	//now go through and caulculate the total forces by timewindow
+   	for(var f in fp_timewindow.history){
+   		var t = 0;
+   		for(var i = 0; i < 6; i++){
+   			t += fp_timewindow.history[f][i];
+   		}
+   		fp_timewindow.history[f][6] = t;
+   		if(t > fp_timewindow.max) fp_timewindow.max = t;
+    }
+   	console.log(fp_timewindow);
+
+    //	now go through and caulculate the total forces by region
+   	for(var r in reg_timewindow.history){
+   		var t = 0;
+   		for(var i = 0; i < history_resolution; i++){
+   			t += reg_timewindow.history[r][i];
+   		}
+   		reg_timewindow.history[r][history_resolution] = t;
+   		if(t > reg_timewindow.max)reg_timewindow.max = t;
+    }
+
+   	console.log(reg_timewindow);
+
+   	
+
  	
-	}
 
 
   //somehow read the history in and populate the most and least presssed regions (for now)
