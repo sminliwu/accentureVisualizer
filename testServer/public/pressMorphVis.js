@@ -31,7 +31,8 @@ function setup() {
 //  d_log.addColumn('timestamp');
   d_log.addColumn('region');
   d_log.addColumn('value');
-  readLog();
+  
+readLog();
 
 
   title = createDiv("A Fabric that Remembers");
@@ -187,8 +188,8 @@ function hasData(data){
  //loads all previous data collected from other instances of running
 function readLog(){
   console.log("Reading Log");
-  d_log = loadTable('log.csv', 'csv', 'header');
-  console.log(d_log);
+  //d_log = loadTable('log.csv', 'csv', 'header');
+  //console.log(d_log);
 }
   
 
