@@ -1,10 +1,3 @@
-var top_text_line = 30;
-var reg_top = 90;
-var  color_value = [230, 230, 230, 230, 230, 230];
-var  history_value = [230, 230, 230, 230, 230, 230];
-var  bg_fill = 255;
-var view_mode = "present";
-
 
   // open socket after everything P5 is ready
 let  socket = io('http://192.168.0.4:5000');
@@ -13,10 +6,30 @@ let  socket = io('http://192.168.0.4:5000');
     console.log(JSON.stringify(packet));
     data = packet['reading'];
   });
-}
+var top_text_line = 30;
+var reg_top = 90;
+var  color_value = [230, 230, 230, 230, 230, 230];
+var  history_value = [230, 230, 230, 230, 230, 230];
+var  bg_fill = 255;
+var  view_mode = "present";
+var  d_log;
+
 
 
 function setup() {
+
+  let url = 'https://jsonplaceholder.typicode.com/posts';
+  let postData = { userId: 1, title: 'p5 Clicked!', body: 'p5.js is way cool.' };
+
+  httpPost(url, 'json', postData, function(result) {
+      strokeWeight(2);
+      stroke(r, g, b);
+      fill(r, g, b, 127);
+      ellipse(mouseX, mouseY, 200, 200);
+      text(result.body, mouseX, mouseY);
+    });
+    
+
   createCanvas(1024,768);
 
   //this wll be removed on install - its just to see the bounds of the tablet screen
@@ -25,10 +38,15 @@ function setup() {
   rect(0, 0, 1024, 768);
 
 
-   header = createDiv();
-   header.parent("sketch");
-   header.position(0, 50);
-   header.size(1024, 100);
+  // header = createDiv();
+  // header.parent("sketch");
+  // header.position(0, 50);
+  // header.size(1024, 100);
+  d_log = new p5.Table();
+  d_log.addColumn('timestamp');
+  d_log.addColumn('region');
+  d_log.addColumn('value');
+  readLog();
 
 
   title = createDiv("A Fabric that Remembers");
@@ -71,6 +89,7 @@ function setup() {
 }
 
 function draw() {
+  background(255);
   fill(bg_fill);
   stroke("#999");
   rect(30, 100, 974, 455)
@@ -108,15 +127,26 @@ function draw() {
   rect(802,344+reg_top,pressreg_w,pressreg_h);
 
 
-
+ 
   //now create a key on the lower corner; 
   push();
+
   translate(800, 575);
+
+
+  fill(0);
+  noStroke();
+  textSize(12);
+  textFont('avenir');
+  text("least force", -70, 20);
+
   for(var l = 0; l <= 10; l++){
-      fill(255, l * (1023/10.0), 0);
+      fill(255, 255 - (l * (255/10.0)), 0);
       rect(l*10, 0, 20, 30);
       
   }
+  fill(0);
+  text("most force", 130, 20);
   pop();
 
 
@@ -131,6 +161,8 @@ function draw() {
 
    }
 }
+
+
 
 
 //placeholder for the incoming data from the web socket
@@ -148,11 +180,50 @@ function hasData(data){
 
  function logData(data){
   //input code to write this to a data log
+  let timestamp = "";
+  let y = year();
+  let m = month();
+  let d = day();
+  let h = hour();
+  let mi = minute();
+  let s = second(); //only write what the last value was within the current second.
+  timestamp = y+":"+m+":"+d+":"+h+":"+mi+":"+s;
+
+  let newRow = d_log.addRow();
+  newRow.setString('timestamp', timestamp);
+  newRow.setNum('region', data.region);
+  newRow.setNum('value', data.scale);
+
+
 
  }
 
+//called form DOM onLoad
+ //loads all previous data collected from other instances of running
+function readLog(){
+  console.log("Reading Log");
+  d_log = loadTable('log.csv', 'csv', 'header');
+  console.log(d_log);
+
+  print(d_log.getRowCount() + ' total rows in table');
+  print(d_log.getColumnCount() + ' total columns in table');
+
+  print(d_log.getColumn('name'));
+  //["Goat", "Leopard", "Zebra"]
+
+  //cycle through the table
+  for (let r = 0; r < d_log.getRowCount(); r++)
+    for (let c = 0; c < d_log.getColumnCount(); c++) {
+      print(d_log.getString(r, c));
+    }
+}
+
+
+
  function loadHistory(){
   //somehow read the history in and populate the most and least presssed regions (for now)
+  /// write history values here
+  //var  history_value = [230, 230, 230, 230, 230, 230];
 
 
  }
@@ -167,6 +238,8 @@ function swapToPastMode() {
 
   button_present.style('background-color', "#000");
   button_present.style('color', "#fff");
+
+   saveTable(d_log, 'log.csv');
 }
 
 function swapToPresentMode(){
@@ -196,3 +269,5 @@ function transformForce(forceData){
    var toScale = (1023-forceData)*0.2248289345;
    return int(toScale);
 }
+}
+
