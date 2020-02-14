@@ -4,7 +4,8 @@
 
 // TO DO 
 // DONE (1) This code needs to serve HTTP files (stored locally)
-// -- (2) This code needs to establish websocket with client
+// DONE (2) This code needs to establish websocket with client
+// -- (3) Combine this code with fabricsense.ino to read Arduino pins
 
 #include <WiFi.h>
 #include <WebSocketsServer.h>
