@@ -22,7 +22,7 @@ http.on('listening', function() {
 	console.log('starting')
 	const interfaces = os.networkInterfaces()
 	console.log('interfaces', JSON.stringify(interfaces, null, 2))
-	var myIP = interfaces['en0'][1]['address'];
+	var myIP = interfaces['Wi-Fi'][1]['address'];
 	console.log('Hosting server from ' + myIP + ':' + port);
 });
 
