@@ -1,5 +1,11 @@
 
 
+//color pallete//
+
+var c_red = 0;
+var c_white = 0;
+var c_blue = 0;
+
 var top_text_line = 30;
 var reg_top = 90;
 var num_regions = 6;
@@ -22,13 +28,17 @@ var  reg_timewindow = {
 
 function setup() {
 
+c_red = color(255, 0, 0);
+ c_white = color(255, 255, 255);
+ c_blue = color(11,66,110);
+
    //calculateLocalStoreUsage();
 
   createCanvas(1024,768);
 
   //this wll be removed on install - its just to see the bounds of the tablet screen
   noFill();
-  stroke(100);
+  stroke(c_red);
   rect(0, 0, 1024, 768);
   history_slider = createSlider(0, history_resolution, history_resolution, 1);
   history_slider.position(30, 700);
@@ -38,27 +48,29 @@ function setup() {
   title = createDiv("A Fabric that Remembers");
   title.style('font-family', 'avenir');
   title.style('font-size', '24px');
+   title.style('color', '#f00');
   title.position(30, 50);
 
 
-  button_past = createButton('past');
+
+  button_past = createButton('history');
   button_past.position(780, 50);
   button_past.mousePressed(swapToPastMode);
   button_past.size(100,30);
   button_past.style("background-color", "#fff");
-  button_past.style("border", "thin solid #999")
-  button_past.style("color", "#000");
+  button_past.style("border", "thin solid #f00")
+  button_past.style("color", "#f00");
   button_past.style('font-family', 'avenir');
   button_past.style('font-size', '14px');
 
 
 
-  button_present = createButton('present');
+  button_present = createButton('live');
   button_present.position(900, 50);
   button_present.mousePressed(swapToPresentMode);
   button_present.size(100,30);
-  button_present.style("border", "thin solid #999")
-  button_present.style("background-color", "#000");
+  button_present.style("border", "thin solid #f00")
+  button_present.style("background-color", "#f00");
   button_present.style("color", "#fff");
   button_present.style('font-family', 'avenir');
   button_present.style('font-size', '14px');
@@ -71,15 +83,18 @@ function setup() {
 
 function draw() {
 
+  if(view_mode == "present"){
+	  background(c_white);
+	  stroke(c_red);
+  }else{
+  	  background(c_blue);
+      stroke(c_white);
+  }
 
-
-  background(255);
-  fill(bg_fill);
-  stroke("#999");
   textSize(12);
   textFont('avenir');
 
-
+  noFill();
   rect(30, 100, 974, 455)
 
   //make sure the color scale matches the mode
@@ -136,35 +151,35 @@ function draw() {
 
 
 
-  fill(0);
+  fill(c_red);
   noStroke();
   text("least force", -70, 20);
 
   for(var l = 0; l <= 10; l++){
-      fill(255, 255 - (l * (255/10.0)), 0);
+      fill(255, 0, 0, l * (255/10.0));
       rect(l*10, 0, 20, 30);
       
   }
-  fill(0);
+  fill(c_red);
   text("most force", 130, 20);
   pop();
    }
 
 
 
-   // if(mouseIsPressed) {
-	  //  	 console.log("mouse Press");
-	  //    hasData({region: 1, scale: 10});
-	  //    hasData({region: 2, scale: 6});
-	  //    hasData({region: 3, scale: 10});
-   // } else {
-	  //   	hasNoData(0);
-	  //     hasNoData(1);
-	  //     hasNoData(2);
-	  //     hasNoData(3);
-	  //     hasNoData(4);
-   //    	hasNoData(5);
-   // }
+   if(mouseIsPressed) {
+	   	 console.log("mouse Press");
+	     hasData({region: 1, scale: 10});
+	     hasData({region: 2, scale: 6});
+	     hasData({region: 3, scale: 10});
+   } else {
+	    	hasNoData(0);
+	      hasNoData(1);
+	      hasNoData(2);
+	      hasNoData(3);
+	      hasNoData(4);
+      	hasNoData(5);
+   }
 
 }
 
@@ -173,9 +188,9 @@ function draw() {
 function getColor(region){
 
 	if(view_mode == "present"){
-		return color(255,color_value[region],0);
+		return color(255,0,0, 255-(color_value[region]));
 	}else{
-		return color(history_value[region]);
+		return color(255, 255, 255,history_value[region]+10);
 	}
 
 
@@ -188,20 +203,19 @@ function drawHistoryGraph(){
   	var graph_w = 880;
   	push();
   	translate(30, 575);
-  	stroke(200);
- 
+  	stroke(c_white);
   	noStroke();
-  	fill(0);
+  	fill(c_white);
   	text("start date", 0,  graph_h+20);
   	text("ACTIVITY LOG", graph_w/2-25,  graph_h+20);
   	text("end date", graph_w-50, graph_h+20);
 
-  	fill(255, 0, 0);
+  	fill(c_white);
   	text("most pressed", graph_w+20,  10);
   	text("least pressed", graph_w+20,  graph_h);
 
 
-	stroke(200);
+	stroke(255, 255, 255, 100);
 	noFill();
 
 	  	push()
@@ -214,7 +228,7 @@ function drawHistoryGraph(){
 
 	 	push()
 	 	noFill();
-	 	stroke(255, 0, 0);
+	 	stroke(c_white);
 	 	var last_y = -1;
 	 	var y = 0;
 	 	translate(0, graph_h);
@@ -371,13 +385,18 @@ function setHistoryColorValues(time){
 
 function swapToPastMode() {
   view_mode = "past";
-  bg_fill = 100;
+  bg_fill = color(255,106,91);
 
-  button_past.style('background-color', "#000");
-  button_past.style('color', "#fff");
+  button_past.style('background-color', "#fff");
+  button_past.style('color', "#0b426e");
+  button_past.style("border", "thin solid #fff")
 
-  button_present.style('background-color', "#fff");
-  button_present.style('color', "#000");
+  button_present.style('background-color', "#0b426e");
+  button_present.style('color', "#fff");
+  button_present.style("border", "thin solid #fff")
+
+  title.style('color', "#fff");
+
 
   history_slider.show();
 
@@ -391,11 +410,17 @@ function swapToPresentMode(){
   bg_fill = 255;
 
 
-  button_present.style('background-color', "#000");
+  button_present.style('background-color', "#f00");
   button_present.style('color',  "#fff");
+  button_present.style("border", "thin solid #f00")
 
   button_past.style('background-color', "#fff");
-  button_past.style('color', "#000");
+  button_past.style('color', "#f00");
+  button_past.style("border", "thin solid #f00")
+
+  title.style('color', "#f00");
+
+
 }
 
 
