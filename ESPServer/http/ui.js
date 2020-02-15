@@ -220,26 +220,29 @@ function drawHistoryGraph(){
   	var end_str = date_end.getMonth()+"/"+date_end.getDate()+"/"+date_end.getFullYear()
 
   	
-  	text(begin_str, 0,  graph_h+20);
-  	text("ACTIVITY LOG", graph_w/2-25,  graph_h+20);
-  	text(end_str, graph_w-50, graph_h+20);
+  	text(date_begin, 0,  graph_h+20);
+  	text("ACTIVITY LOG", graph_w/2-55,  graph_h+20);
+  	text(date_end, graph_w-350, graph_h+20);
 
   	fill(c_white);
-  	text("most pressed", graph_w+20,  10);
-  	text("least pressed", graph_w+20,  graph_h);
+  	text("most pressed", graph_w,  10);
+  	text("least pressed", graph_w,  graph_h);
 
 
 	stroke(255, 255, 255, 100);
 	noFill();
 
+		//draw the tick marks
 	  	push()
 		  	for(var i =0; i < history_resolution; i++){
 		  	   line(0,0, 0, graph_h);
 		  	   translate(graph_w/history_resolution, 0);
 		  	}
-	  	line(0,0, 0, graph_h);
+	  	//line(0,0, 0, graph_h);
 	  	pop();
 
+
+	  	//draw the graph line
 	 	push()
 	 	noFill();
 	 	stroke(c_white);
@@ -253,10 +256,8 @@ function drawHistoryGraph(){
 		  	   	line(0,(1-last_y), graph_w/history_resolution, (1-y));
 		  	    translate(graph_w/history_resolution, 0);
 		  	   }
-		  	   last_y = y
-		  	  
+		  	   last_y = y		  	  
 		  	}
-	    line(0,last_y, graph_w/history_resolution, y);
 	  	pop();
   	pop();
 }
