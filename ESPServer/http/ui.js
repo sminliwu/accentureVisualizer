@@ -24,6 +24,9 @@ var  reg_timewindow = {
 	max: 0
 };
 
+var oldest_stamp = 0;
+var newest_stamp =  0;
+
 
 
 function setup() {
@@ -206,9 +209,20 @@ function drawHistoryGraph(){
   	stroke(c_white);
   	noStroke();
   	fill(c_white);
-  	text("start date", 0,  graph_h+20);
+
+
+  	var date_begin = new Date();
+  	date_begin.setMilliseconds((oldest_stamp*1000)-Date.now());
+  	var begin_str = date_begin.getMonth()+"/"+date_begin.getDate()+"/"+date_begin.getFullYear()
+
+  	var date_end = new Date();
+  	date_end.setMilliseconds((newest_stamp*1000)-Date.now());
+  	var end_str = date_end.getMonth()+"/"+date_end.getDate()+"/"+date_end.getFullYear()
+
+  	
+  	text(begin_str, 0,  graph_h+20);
   	text("ACTIVITY LOG", graph_w/2-25,  graph_h+20);
-  	text("end date", graph_w-50, graph_h+20);
+  	text(end_str, graph_w-50, graph_h+20);
 
   	fill(c_white);
   	text("most pressed", graph_w+20,  10);
@@ -302,8 +316,8 @@ function hasNoData(region){
    d_log = loadRawLog();
 
 
-	var oldest_stamp = d_log[0].timestamp;
-   	var newest_stamp =   d_log[0].timestamp
+	oldest_stamp = d_log[0].timestamp;
+   	newest_stamp =   d_log[0].timestamp
 
 	for(var d in d_log){
 		if(d_log[d].timestamp > newest_stamp) newest_stamp = d_log[d].timestamp;
@@ -323,9 +337,11 @@ function hasNoData(region){
 
    		window_array = fp_timewindow.history[cur_window];
    	   	window_array[d_log[d].region] = int(window_array[d_log[d].region]) +int(d_log[d].value);  
+   	   	//window_array[d_log[d].region] = int(window_array[d_log[d].region]) +1;  
 
    	   	region_array =  reg_timewindow.history[d_log[d].region];
    	   	region_array[cur_window] = int(region_array[d_log[d].region]) + int(d_log[d].value);
+   	   	//region_array[cur_window] = int(region_array[d_log[d].region]) + 1;
 
 
    	}
