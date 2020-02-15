@@ -26,11 +26,11 @@ var  reg_timewindow = {
 var oldest_stamp = 0;
 var newest_stamp =  0;
 
-
+var clear_timer = 0;
 
 function setup() {
 
-c_red = color(255, 0, 0);
+ c_red = color(255, 0, 0);
  c_white = color(255, 255, 255);
  c_blue = color(11,66,110);
 
@@ -85,8 +85,10 @@ c_red = color(255, 0, 0);
 
 function draw() {
 
+  if(clear_timer >= 60){
+  	clearData();
+  }
 
-  matchColor(0,0);
 
   if(view_mode == "present"){
 	  background(c_white);
@@ -170,6 +172,7 @@ function draw() {
   pop();
    }
 
+  clear_timer++;
 
 
 }
@@ -263,11 +266,13 @@ function hasData(data){
 }
 
 
-function hasNoData(region){
+function clearData(){
   //data.scale will be a number from 0-10
   //must map scale to a range from 0-1023
-  var color_target = 0;
-  matchColor(region, color_target);
+  for(var i = 0; i < 6;i++){
+	  var color_target = 0;
+	  matchColor(i, color_target);
+	}
 }
 
 
