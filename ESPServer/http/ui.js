@@ -2,11 +2,13 @@
 
 var top_text_line = 30;
 var reg_top = 90;
+var num_regions = 6;
 var  color_value = [230, 230, 230, 230, 230, 230];
 var  history_value = [230, 230, 230, 230, 230, 230];
 var  bg_fill = 255;
 var  view_mode = "present";
-var  history_resolution = 10;
+var  history_resolution = 50;
+
 var  fp_timewindow = {
 	history: [],
 	max: 0
@@ -28,17 +30,10 @@ function setup() {
   noFill();
   stroke(100);
   rect(0, 0, 1024, 768);
-
-
-  // header = createDiv();
-  // header.parent("sketch");
-  // header.position(0, 50);
-  // header.size(1024, 100);
-  d_log = new p5.Table();
-//  d_log.addColumn('timestamp');
-  d_log.addColumn('region');
-  d_log.addColumn('value');
-  
+  history_slider = createSlider(0, history_resolution, history_resolution, 1);
+  history_slider.position(30, 700);
+  history_slider.style("width", "880px");
+  history_slider.hide();
 
   title = createDiv("A Fabric that Remembers");
   title.style('font-family', 'avenir');
@@ -50,9 +45,9 @@ function setup() {
   button_past.position(780, 50);
   button_past.mousePressed(swapToPastMode);
   button_past.size(100,30);
-  button_past.style("background-color", "#333");
+  button_past.style("background-color", "#fff");
   button_past.style("border", "thin solid #999")
-  button_past.style("color", "#FFF");
+  button_past.style("color", "#000");
   button_past.style('font-family', 'avenir');
   button_past.style('font-size', '14px');
 
@@ -63,77 +58,86 @@ function setup() {
   button_present.mousePressed(swapToPresentMode);
   button_present.size(100,30);
   button_present.style("border", "thin solid #999")
-  button_present.style("background-color", "#FFF");
-  button_present.style("color", "#000");
+  button_present.style("background-color", "#000");
+  button_present.style("color", "#fff");
   button_present.style('font-family', 'avenir');
   button_present.style('font-size', '14px');
-
-  footer = createDiv();
-  footer.parent("sketch");
-  footer.position(800, 50);
-  footer.size(1024, 200);
-
-
-   history_slider = createSlider(0, 255, 100);
-   history_slider.position(30, 700);
-   history_slider.style("width", "600px");
-
-
-
 
 
 }
 
+
+
+
 function draw() {
+
+
+
   background(255);
   fill(bg_fill);
   stroke("#999");
+  textSize(12);
+  textFont('avenir');
+
+
   rect(30, 100, 974, 455)
 
   //make sure the color scale matches the mode
-  var which_color = (view_mode == "present") ? color_value : history_value;
+ // var which_color = (view_mode == "present") ? color_value : history_value;
 
   noStroke();
   pressreg_w = 190;
   pressreg_h = 94;
 
 
+
+  if(view_mode != "present"){
+	let v = history_slider.value();
+    setHistoryColorValues(v);
+  }
+
+
   //top left - region 0
-  fill(255,which_color[0],0);
+  fill(getColor(0));
   rect(93,32+reg_top,pressreg_w,pressreg_h);
 
   //top right - region 1
-  fill(255,which_color[1],0);
+  fill(getColor(1));
   rect(739,32+reg_top,pressreg_w,pressreg_h);
 
   //middle left - region 2
-  fill(255,which_color[2],0);
+  fill(getColor(2));
   rect(267,192+reg_top,pressreg_w,pressreg_h);
 
   //middle right - region 3
-  fill(255,which_color[3],0);
+  fill(getColor(3));
   rect(567,192+reg_top,pressreg_w,pressreg_h);
 
   //bottom left - region 4
-  fill(255,which_color[4],0);
+  fill(getColor(4));
   rect(44,344+reg_top,pressreg_w,pressreg_h);
 
   //bottom right- region 5
-  fill(255,which_color[5],0);
+  fill(getColor(5));
   rect(802,344+reg_top,pressreg_w,pressreg_h);
 
 
 
   //create the sliding 
+  if(view_mode != "present"){
+		drawHistoryGraph();
 
+  }else{
  
   //now create a key on the lower corner; 
   push();
-  translate(800, 680);
+  translate(800, 575);
+
+
+
+
   fill(0);
   noStroke();
-  textSize(12);
-  textFont('avenir');
   text("least force", -70, 20);
 
   for(var l = 0; l <= 10; l++){
@@ -144,23 +148,89 @@ function draw() {
   fill(0);
   text("most force", 130, 20);
   pop();
-
-
-
-   if(mouseIsPressed) {
-	   	 console.log("mouse Press");
-	     hasData({region: 2, scale: 10});
-	     hasData({region: 3, scale: 6});
-	     hasData({region: 4, scale: 10});
-   } else {
-	    	hasNoData(0);
-	      hasNoData(1);
-	      hasNoData(2);
-	      hasNoData(3);
-	      hasNoData(4);
-      	hasNoData(5);
    }
 
+
+
+   // if(mouseIsPressed) {
+	  //  	 console.log("mouse Press");
+	  //    hasData({region: 1, scale: 10});
+	  //    hasData({region: 2, scale: 6});
+	  //    hasData({region: 3, scale: 10});
+   // } else {
+	  //   	hasNoData(0);
+	  //     hasNoData(1);
+	  //     hasNoData(2);
+	  //     hasNoData(3);
+	  //     hasNoData(4);
+   //    	hasNoData(5);
+   // }
+
+}
+
+
+
+function getColor(region){
+
+	if(view_mode == "present"){
+		return color(255,color_value[region],0);
+	}else{
+		return color(history_value[region]);
+	}
+
+
+}
+
+
+function drawHistoryGraph(){
+  	history_slider.show();
+  	var graph_h = 100;
+  	var graph_w = 880;
+  	push();
+  	translate(30, 575);
+  	stroke(200);
+ 
+  	noStroke();
+  	fill(0);
+  	text("start date", 0,  graph_h+20);
+  	text("ACTIVITY LOG", graph_w/2-25,  graph_h+20);
+  	text("end date", graph_w-50, graph_h+20);
+
+  	fill(255, 0, 0);
+  	text("most pressed", graph_w+20,  10);
+  	text("least pressed", graph_w+20,  graph_h);
+
+
+	stroke(200);
+	noFill();
+
+	  	push()
+		  	for(var i =0; i < history_resolution; i++){
+		  	   line(0,0, 0, graph_h);
+		  	   translate(graph_w/history_resolution, 0);
+		  	}
+	  	line(0,0, 0, graph_h);
+	  	pop();
+
+	 	push()
+	 	noFill();
+	 	stroke(255, 0, 0);
+	 	var last_y = -1;
+	 	var y = 0;
+	 	translate(0, graph_h);
+
+		  	for(var i = 0; i < history_resolution; i++){
+		  		y = fp_timewindow.history[i][6] / fp_timewindow.max * graph_h;
+		  	   if(last_y != -1){
+		  	   	line(0,(1-last_y), graph_w/history_resolution, (1-y));
+		  	    translate(graph_w/history_resolution, 0);
+		  	   }
+		  	   last_y = y
+		  	  
+		  	}
+	    line(0,last_y, graph_w/history_resolution, y);
+	  	pop();
+  	pop();
 }
 
 
@@ -193,16 +263,24 @@ function hasNoData(region){
  	fp_timewindow.history = [];
  	fp_timewindow.max = 0;
 
- 	//CALCULATE FORCE PER TIME WINDOW
+
  	for(var i = 0; i <= history_resolution; i++){
- 		//cumulative values for region plus total
- 		fp_timewindow.history[i] = [0, 0,0,0, 0,0, 0];
- 		if(i < 6) reg_timewindow.history[i] = [0, 0, 0,0,0,0,0,0,0,0, 0]; //this is bad form, but for now
+ 		fp_timewindow.history[i] = [];
+ 		for(var j = 0; j < num_regions; j++){
+ 			fp_timewindow.history[i].push(0);
+ 		}
+ 		//write an extra element for totals
+ 		fp_timewindow.history[i].push(0);
  	}
 
- 	console.log(reg_timewindow);
-
-
+ 	for(var i = 0; i < num_regions; i++){
+ 		reg_timewindow.history[i] = [];
+ 		for(var j = 0; j <= history_resolution; j++){
+ 			reg_timewindow.history[i].push(0);
+ 		}
+ 		//write an extra element for totals
+ 		reg_timewindow.history[i].push(0);
+ 	}
 
 
  	//this function should show the total accumulated force within the time window saved.
@@ -217,8 +295,6 @@ function hasNoData(region){
 		if(d_log[d].timestamp > newest_stamp) newest_stamp = d_log[d].timestamp;
 		if(d_log[d].timestamp < oldest_stamp) oldest_stamp = d_log[d].timestamp;
 	}
-
-   	console.log(oldest_stamp, newest_stamp);
 
    	var elapsed = newest_stamp - oldest_stamp;
    	var time_window = elapsed / history_resolution; 
@@ -250,57 +326,76 @@ function hasNoData(region){
    		fp_timewindow.history[f][6] = t;
    		if(t > fp_timewindow.max) fp_timewindow.max = t;
     }
-   	console.log(fp_timewindow);
 
     //	now go through and caulculate the total forces by region
    	for(var r in reg_timewindow.history){
    		var t = 0;
-   		for(var i = 0; i < history_resolution; i++){
+   		var l = reg_timewindow.history[r].length -1;
+   		for(var i = 0; i < l; i++){
    			t += reg_timewindow.history[r][i];
    		}
-   		reg_timewindow.history[r][history_resolution] = t;
+   		reg_timewindow.history[r][l] = t;
    		if(t > reg_timewindow.max)reg_timewindow.max = t;
     }
 
-   	console.log(reg_timewindow);
-
    	
 
- 	
+ 	history_value = [];
 
 
-  //somehow read the history in and populate the most and least presssed regions (for now)
-  /// write history values here
-  //var  history_value = [230, 230, 230, 230, 230, 230];
-
+  //set history values to most and least pressed
+  for(r in reg_timewindow.history){
+  	var last_value = reg_timewindow.history[r].length - 2;
+    setHistoryColorValues(int(r), last_value);
+  }
 
  }
 
+
+function setHistoryColorValues(time){
+
+	history_value = [0,0,0,0,0,0];
+	var ndx = 0;
+
+	for(var r in reg_timewindow.history){
+		for(var t = 0; t < time; t++){
+			history_value[r] = history_value[r] + reg_timewindow.history[r][t];
+		}
+	}
+
+	for(var i = 0; i < num_regions; i++){
+		history_value[i] = (history_value[i] / reg_timewindow.max)*255;
+	}
+	
+}
 
 function swapToPastMode() {
   view_mode = "past";
   bg_fill = 100;
 
-  button_past.style('background-color', "#fff");
-  button_past.style('color', "#000");
+  button_past.style('background-color', "#000");
+  button_past.style('color', "#fff");
 
-  button_present.style('background-color', "#000");
-  button_present.style('color', "#fff");
+  button_present.style('background-color', "#fff");
+  button_present.style('color', "#000");
+
+  history_slider.show();
 
   loadHistory();
 
 }
 
 function swapToPresentMode(){
+  history_slider.hide();
   view_mode = "present";
   bg_fill = 255;
 
 
-  button_present.style('background-color', "#fff");
-  button_present.style('color',  "#000");
+  button_present.style('background-color', "#000");
+  button_present.style('color',  "#fff");
 
-  button_past.style('background-color', "#000");
-  button_past.style('color', "#fff");
+  button_past.style('background-color', "#fff");
+  button_past.style('color', "#000");
 }
 
 
