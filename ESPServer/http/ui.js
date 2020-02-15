@@ -1,5 +1,4 @@
 
-
 //color pallete//
 
 var c_red = 0;
@@ -86,6 +85,9 @@ c_red = color(255, 0, 0);
 
 function draw() {
 
+
+  matchColor(0,0);
+
   if(view_mode == "present"){
 	  background(c_white);
 	  stroke(c_red);
@@ -169,20 +171,6 @@ function draw() {
    }
 
 
-
-   if(mouseIsPressed) {
-	   	 console.log("mouse Press");
-	     hasData({region: 1, scale: 10});
-	     hasData({region: 2, scale: 6});
-	     hasData({region: 3, scale: 10});
-   } else {
-	    	hasNoData(0);
-	      hasNoData(1);
-	      hasNoData(2);
-	      hasNoData(3);
-	      hasNoData(4);
-      	hasNoData(5);
-   }
 
 }
 
