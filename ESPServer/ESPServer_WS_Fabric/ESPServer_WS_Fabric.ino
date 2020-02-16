@@ -1,11 +1,5 @@
 // Date: Feb 14
 // Author: Shanel
-// Connect to BTUGoo @ CU
-
-// TO DO 
-// DONE (1) This code needs to serve HTTP files (stored locally)
-// DONE (2) This code needs to establish websocket with client
-// -- (3) Combine this code with Accenture_FabricSense.ino to read Arduino pins
 
 #include <WiFi.h>
 #include <WebSocketsServer.h>
@@ -13,11 +7,8 @@
 #include <SPIFFS.h>
 #include <string.h>
 
-const char* ssid     = "BTUgoo";
-const char* password = "blowItUp";
-
-//const char* ssid = "UnstableWifi";
-//const char* password = "fluxusmuxus";
+const char* ssid     = "YOUR_NTWK_SSID_HERE";
+const char* password = "YOUR_NTWK_PASSWORD_HERE";
 
 const int port = 80;
 const int WSport = 81;
@@ -107,8 +98,8 @@ void loop(){
   webSocket.loop();
 
   read_values();
-  //print_raw_values();
-  print_offset_steps();
+  // send values from fabric to the websocket
+  print_offset_steps(); // printing has been commented out in final version
   delay(100);
 }
 
@@ -144,24 +135,3 @@ void packVals(int region, int val) {
   strcat(dataBuffer, valStr);
   strcat(dataBuffer, "}");
 }
-
-// void testSequence() {
-//   if ((count >= 0) && (count < 1000)){
-//     webSocket.broadcastTXT("{1, 10}");
-//   } else if ((counter >= 1000) && (count < 2000)) {
-//     webSocket.broadcastTXT("{2, 10}");
-//   } else if ((counter >= 2000) && (count < 3000)) {
-//     webSocket.broadcastTXT("{3, 10}");
-//   } else if ((counter >= 3000) && (count < 4000)) {
-//     webSocket.broadcastTXT("{4, 10}");
-//   } else if ((counter >= 4000) && (count < 5000)) {
-//     webSocket.broadcastTXT("{5, 10}");
-//   } else if (counter >= 5000) {
-//     webSocket.broadcastTXT("{6, 10}");
-//   } else {
-//     Serial.println("Invalid count");
-//   }
-
-//   counter++;
-//   counter = counter % 6000;
-// }

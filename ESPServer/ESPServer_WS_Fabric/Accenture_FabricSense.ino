@@ -97,7 +97,7 @@ void print_offset_values(){
 }
 
 
-/*reads and prints all inputs*/
+/*reads and prints all inputs and sends them to websocket*/
 void print_offset_steps(){
   int diff = 0;
   int diff_step = 0;
@@ -109,17 +109,14 @@ void print_offset_steps(){
     }else{
       diff_step = 0;
     }
-
-    //Serial.println("calc diff step");
     
-    Serial.print(diff_step);
-    //webSocket.broadcastTXT(itoa(1000, dataBuffer, 10));
+    //Serial.print(diff_step);
     if (diff_step > 0) {
       packVals(i, diff_step);
       webSocket.broadcastTXT(dataBuffer);
     }
    
-    if(i < (num_regs-1)) Serial.print(","); //a comma between vals allows multiple draws to plotter 
-    else Serial.println();
+//    if(i < (num_regs-1)) Serial.print(","); //a comma between vals allows multiple draws to plotter 
+//    else Serial.println();
   }  
 }

@@ -1,49 +1,24 @@
-# Accenture Visualizer
-repo for Unstable Design Lab woven smart textile setup
+# Accenture Smart Textile Visualizer
 
+## Components
+- Fabric
+- ESP
+- Tablet
 
-INGREDIENTS
-Fabric
-ESP
-Tablet
-
-
-
-SETUP
+## Setup/Installation
 ESP - reading fabric sensor data and serving it to the client
 Tablet - Pointed to URL at unstable.design
 
+### 1. Install fabric according to [Image] wiring.
 
+### 2. Set up ESP with the local Wi-Fi network
 
+Open ESPServer_WS_Fabric.ino file in the Arduino IDE. Change SSID and password at the top of the file to your Wi-Fi network's information. Reprogram the ESP board with the edited code. After the program has finished uploading, open up the serial monitor and press the RST button on the ESP to reboot. After a couple of seconds, if the connection is successful, the ESP should print its IP address on the network.
 
-Step: 1
-Install Fabric according to [Image] Wiring
+The network must run on 2.4GHz (Wi-Fi 4) to be compatible with the ESP. The network also needs to use WEP or WPA/WPA2 Personal encryption (NOT WPA Enterprise). We recommend assigning a static IP to the ESP. 
 
-Step 2: 
-Plug in ESP to Wall Power
+### 3. Connect ESP to wall power.
 
-Step 3:
-Setup Network INFO
-WebSocketServer.ino 
-Change SSID and password (to the desired network). 
-Make sure network filters allow access.... (TO DO)
+### 4. Connect tablet to ESP.
 
-Make sure the tablet is connected to the same network.
-
-Match the IP in the Processing Sketch to the same IP used in the WebSocketServer.ino
-
-
-Step 4: 
-Go to http://unstable.design/accentureVisualizer/testServer/public/ 
-
-
-TO DO - 
-EMMA -  debug ESP crash, start publishing to socket from ESP
-
-SHANEL - getting code to listen to the socket from P5
-
-LAURA - udpate P5 Interface + Read from log files
-      - P5 to write log files
-       - template log available in public folder
-
-
+Connect the tablet to the same Wi-Fi network that the ESP is on. Open a browser window and go to the IP address of the ESP.
