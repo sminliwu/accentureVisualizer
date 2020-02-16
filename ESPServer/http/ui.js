@@ -1,18 +1,28 @@
+/*
+AUTHOR: LAURA
+PROJECT: ACCENTURE FABRIC THAT REMEMBERS
+DESC: This code controls the UI. It updates based on calls from client and then writes to log.
+It also parses the log in order to draw history graphs
+*/
 
-//color pallete//
 
 var c_red = 0;
 var c_white = 0;
 var c_blue = 0;
-
+var font = 'arial';
 var top_text_line = 30;
 var reg_top = 90;
-var num_regions = 6;
-var  color_value = [230, 230, 230, 230, 230, 230];
-var  history_value = [230, 230, 230, 230, 230, 230];
 var  bg_fill = 255;
+var num_regions = 6;
+
+
+var  color_value = [0, 0, 0, 0, 0, 0];
+var  history_value = [0, 0, 0, 0, 0, 0];
+var  color_targets = [0,0,0,0,0,0];
+
 var  view_mode = "present";
-var  history_resolution = 50;
+
+var  history_resolution = 50; //adjust this if you want the history vis to be more or less detailed. 
 
 var  fp_timewindow = {
 	history: [],
@@ -26,19 +36,14 @@ var  reg_timewindow = {
 var oldest_stamp = 0;
 var newest_stamp =  0;
 
-var clear_timer = 0;
-
 function setup() {
 
- c_red = color(255, 0, 0);
- c_white = color(255, 255, 255);
- c_blue = color(11,66,110);
-
-   //calculateLocalStoreUsage();
+   c_red = color(255, 0, 0);
+   c_white = color(255, 255, 255);
+   c_blue = color(11,66,110);
 
   createCanvas(1024,768);
 
-  //this wll be removed on install - its just to see the bounds of the tablet screen
   noFill();
   stroke(c_red);
   rect(0, 0, 1024, 768);
@@ -48,11 +53,10 @@ function setup() {
   history_slider.hide();
 
   title = createDiv("A Fabric that Remembers");
-  title.style('font-family', 'avenir');
+  title.style('font-family', font);
   title.style('font-size', '24px');
    title.style('color', '#f00');
   title.position(30, 50);
-
 
 
   button_past = createButton('history');
@@ -62,7 +66,7 @@ function setup() {
   button_past.style("background-color", "#fff");
   button_past.style("border", "thin solid #f00")
   button_past.style("color", "#f00");
-  button_past.style('font-family', 'avenir');
+  button_past.style('font-family', font);
   button_past.style('font-size', '14px');
 
 
@@ -74,9 +78,8 @@ function setup() {
   button_present.style("border", "thin solid #f00")
   button_present.style("background-color", "#f00");
   button_present.style("color", "#fff");
-  button_present.style('font-family', 'avenir');
+  button_present.style('font-family', font);
   button_present.style('font-size', '14px');
-
 
 }
 
@@ -84,11 +87,6 @@ function setup() {
 
 
 function draw() {
-
-  if(clear_timer >= 60){
-  	clearData();
-  }
-
 
   if(view_mode == "present"){
 	  background(c_white);
@@ -99,24 +97,20 @@ function draw() {
   }
 
   textSize(12);
-  textFont('avenir');
-
+  textFont(font);
   noFill();
   rect(30, 100, 974, 455)
 
-  //make sure the color scale matches the mode
- // var which_color = (view_mode == "present") ? color_value : history_value;
-
-  noStroke();
   pressreg_w = 190;
   pressreg_h = 94;
-
+  noStroke();
 
 
   if(view_mode != "present"){
 	let v = history_slider.value();
     setHistoryColorValues(v);
   }
+
 
 
   //top left - region 0
@@ -145,24 +139,34 @@ function draw() {
 
 
 
-  //create the sliding 
+  //draw the information under the region visualization
+
   if(view_mode != "present"){
 		drawHistoryGraph();
-
   }else{
- 
-  //now create a key on the lower corner; 
+    drawKey();
+   }
+
+
+}
+
+//for testing only - comment out on deployed version
+function mousePressed(){
+    //hasData({region: Math.floor(Math.random() * 6), scale: Math.floor(Math.random() * 10)});
+    //hasData({region: 4, scale:9});
+ }
+
+
+function drawKey(){
+ //now create a key on the lower corner; 
   push();
   translate(800, 575);
-
-
-
 
   fill(c_red);
   noStroke();
   text("least force", -70, 20);
 
-  for(var l = 0; l <= 10; l++){
+  for(var l = 0; l < 10; l++){
       fill(255, 0, 0, l * (255/10.0));
       rect(l*10, 0, 20, 30);
       
@@ -170,25 +174,8 @@ function draw() {
   fill(c_red);
   text("most force", 130, 20);
   pop();
-   }
-
-  clear_timer++;
-
-
 }
 
-
-
-function getColor(region){
-
-	if(view_mode == "present"){
-		return color(255,0,0, 255-(color_value[region]));
-	}else{
-		return color(255, 255, 255,history_value[region]+10);
-	}
-
-
-}
 
 
 function drawHistoryGraph(){
@@ -256,26 +243,67 @@ function drawHistoryGraph(){
 
 
 
-//placeholder for the incoming data from the web socket
+//this is called from the web socket each time a region has a non-zero value to report
 function hasData(data){
+  console.log(data);
   //data.scale will be a number from 0-10
-  //must map scale to a range from 0-1023
-  var color_target = data.scale * (1023/10);
-  matchColor(data.region, color_target);
+  color_targets[data.region] = data.scale;
   logData(data);
 }
 
+//note, changing these values makes the transition faster
+function getColor(region){
 
-function clearData(){
-  //data.scale will be a number from 0-10
-  //must map scale to a range from 0-1023
-  for(var i = 0; i < 6;i++){
-	  var color_target = 0;
-	  matchColor(i, color_target);
-	}
+  working_colors = (view_mode=="present") ? color_value : history_value;
+  target_adjusted = color_targets[region]*250/10;
+
+    if(working_colors[region] < target_adjusted){
+      working_colors[region] += 5;
+
+    }else if(working_colors[region] == target_adjusted){
+      color_targets[region] = 0;
+
+    }else{
+       working_colors[region] -= 5;
+    }
+
+
+  if(view_mode == "present"){
+    return color(255,0,0, working_colors[region]+5);
+  }else{
+    return color(255, 255, 255,working_colors[region]+5);
+  }
+
 }
 
 
+
+// function matchColor(region, forceData) {
+//   var transformedForce = transformForce(forceData);
+//   if (color_value[region] < (transformedForce-1)){
+//     color_value[region] +=10;
+//   } else if (color_value[region] > (transformedForce + 1)) {
+//     color_value[region] -= 10;
+//   }
+// }
+
+// function transformForce(forceData){
+//    var toScale = (1023-forceData)*0.2248289345;
+//    return int(toScale);
+// }
+
+
+
+// function clearData(){
+//   //data.scale will be a number from 0-10
+//   //must map scale to a range from 0-1023
+//   for(var i = 0; i < 6;i++){
+// 	  var color_target = 0;
+// 	  matchColor(i, color_target);
+// 	}
+// }
+
+//this loads the current log data and organizes it into structutres by region and time window for visualization
 
  function loadHistory(){
 
@@ -435,18 +463,4 @@ function swapToPresentMode(){
 
 
 
-function matchColor(region, forceData) {
-  var transformedForce = transformForce(forceData);
-  if (color_value[region] < (transformedForce-1)){
-    color_value[region] +=10;
-  } else if (color_value[region] > (transformedForce + 1)) {
-    color_value[region] -= 10;
-  }
-}
 
-function transformForce(forceData){
-   var toScale = (1023-forceData)*0.2248289345;
-   return int(toScale);
-}
-
-// this is the p5 sketch to load as the UI
