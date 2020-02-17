@@ -38,7 +38,7 @@ int base[6];
 int max_offset = 500;
 
 //preset number of "steps" to detect in each press
-int offset_step_size = 100;
+int offset_step_size = 50;
 
 //the total number of regions on the fabric
 int num_regs = 6;

@@ -47,7 +47,7 @@ void read_values(){
   for(int i = 0; i < num_regs; i++){
       vals[i] = analogRead(fregs[i]); 
     }  
-  Serial.println("read vals");
+  //Serial.println("read vals");
 }
 
 
