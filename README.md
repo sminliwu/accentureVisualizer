@@ -24,10 +24,18 @@ Connect the tablet to the same Wi-Fi network that the ESP is on. Open a browser 
 ## User Interface and Data Logs
  The user interface client will run on the browser on your local machine. We reccomend using Google Chrome. The UI updates the visualizaiton based on the information it receives for the ESP and writes that information to the browsers Local Storage. You can view the local storage used by opening the Chrome Code Inspector, clicking "Application", and then "Local Storage." This data is used to show the history of interactions with the fabric and will be preserved even if chrome is closed. An explaination of the user interface features can be found [here](Documentation/ui_explained.pdf).
  
- # Making Changes to the UI
- If you would like to make changes to the UI, please do so in the [ui.js](Release/ESPServer_WS_Fabric/http/ui.js) file. 
+### Making Changes to the UI
+ If you would like to make changes to the UI, please do so in the [ui.js](Release/ESPServer_WS_Fabric/data/ui.js) file. 
 
-# Making Changes to the Logs
-If you would like to make any changes to the way data is logged, you can do so in [log.js] (Release/ESPServer_WS_Fabric/http/log.js). The log contains some helper functions for clearing and recording the data. Since the lcoal storage can store only 5MB of data (or 650,000 data entries) we have writen functions for you to both clear the data (which you should do carefully) or download the data to a local file. Once the log is full, the software will simply delete and overwrite the oldest entry in the log.
+### Making Changes to the Logs
+If you would like to make any changes to the way data is logged, you can do so in [log.js] (Release/ESPServer_WS_Fabric/data/log.js). The log contains some helper functions for clearing and recording the data. Since the lcoal storage can store only 5MB of data (or 650,000 data entries) we have writen functions for you to both clear the data (which you should do carefully) or download the data to a local file. Once the log is full, the software will simply delete and overwrite the oldest entry in the log. 
 
 
+####Helper Functions
+Opening the chrome console and typing the followign functions will allow you to clear and download accumulated data
+
+downloadLocalStorage()
+downloads a CSV titled with the earliest and latest timestamp for collecting and preserving the data. 
+
+clearLocalStorage()
+erases all data collected in local storage. This should really only be done on setup, as the visulalizaiton gets more interesting the more data that accumulates
