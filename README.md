@@ -28,10 +28,10 @@ Connect the tablet to the same Wi-Fi network that the ESP is on. Open a browser 
  If you would like to make changes to the UI, please do so in the [ui.js](Release/ESPServer_WS_Fabric/data/ui.js) file. 
 
 ### Making Changes to the Logs
-If you would like to make any changes to the way data is logged, you can do so in [log.js] (Release/ESPServer_WS_Fabric/data/log.js). The log contains some helper functions for clearing and recording the data. Since the lcoal storage can store only 5MB of data (or 650,000 data entries) we have writen functions for you to both clear the data (which you should do carefully) or download the data to a local file. Once the log is full, the software will simply delete and overwrite the oldest entry in the log. 
+If you would like to make any changes to the way data is logged, you can do so in [log.js](Release/ESPServer_WS_Fabric/data/log.js). The log contains some helper functions for clearing and recording the data. Since the lcoal storage can store only 5MB of data (or 650,000 data entries) we have writen functions for you to both clear the data (which you should do carefully) or download the data to a local file. Once the log is full, the software will simply delete and overwrite the oldest entry in the log. 
 
 
-####Helper Functions
+#### Helper Functions
 Opening the chrome console and typing the followign functions will allow you to clear and download accumulated data
 
 downloadLocalStorage()
