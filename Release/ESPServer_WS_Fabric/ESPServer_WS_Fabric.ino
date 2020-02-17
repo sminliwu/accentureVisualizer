@@ -34,8 +34,8 @@ int vals[6];
 //preset / compiled baselines for each value
 int base[6];
 
-// preset max offset 
-int max_offset = 1000;
+// preset max offset - this makes it more or less sensitive (max 1000)
+int max_offset = 500;
 
 //preset number of "steps" to detect in each press
 int offset_step_size = 100;

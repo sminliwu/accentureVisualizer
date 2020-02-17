@@ -114,11 +114,11 @@ function draw() {
 
 
   //top left - region 0
-  fill(getColor(0));
+  fill(getColor(4));
   rect(93,32+reg_top,pressreg_w,pressreg_h);
 
   //top right - region 1
-  fill(getColor(1));
+  fill(getColor(5));
   rect(739,32+reg_top,pressreg_w,pressreg_h);
 
   //middle left - region 2
@@ -130,29 +130,30 @@ function draw() {
   rect(567,192+reg_top,pressreg_w,pressreg_h);
 
   //bottom left - region 4
-  fill(getColor(4));
+  fill(getColor(0));
   rect(44,344+reg_top,pressreg_w,pressreg_h);
 
   //bottom right- region 5
-  fill(getColor(5));
+  fill(getColor(1));
   rect(802,344+reg_top,pressreg_w,pressreg_h);
 
 
 
   //draw the information under the region visualization
 
+
   if(view_mode != "present"){
 		drawHistoryGraph();
   }else{
     drawKey();
    }
-
+  
 
 }
 
 //for testing only - comment out on deployed version
 function mousePressed(){
-    //hasData({region: Math.floor(Math.random() * 6), scale: Math.floor(Math.random() * 10)});
+    hasData({region: Math.floor(Math.random() * 6), scale: Math.floor(Math.random() * 10)});
     //hasData({region: 4, scale:9});
  }
 
@@ -173,6 +174,8 @@ function drawKey(){
   }
   fill(c_red);
   text("most force", 130, 20);
+  text("http://unstable.design", -770, 20);
+
   pop();
 }
 
@@ -205,6 +208,7 @@ function drawHistoryGraph(){
   	fill(c_white);
   	text("most pressed", graph_w,  10);
   	text("least pressed", graph_w,  graph_h);
+
 
 
 	stroke(255, 255, 255, 100);
