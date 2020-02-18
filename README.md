@@ -1,5 +1,7 @@
 # Accenture Smart Textile Visualizer
-[unstable.design](http://unstable.design)
+Created by: [unstable.design](http://unstable.design)
+Shanel Wu, Laura Devendorf, Emma Goodwill
+
 
 ## Components
 - Fabric
