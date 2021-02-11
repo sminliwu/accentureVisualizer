@@ -16,7 +16,14 @@ Shanel Wu, Laura Devendorf, Emma Goodwill
 
 Open [ESPServer_WS_Fabric.ino](Release/ESPServer_WS_Fabric/ESPServer_WS_Fabric.ino) file in the Arduino IDE. Change SSID and password at the top of the file to your Wi-Fi network's information.
 
-Reprogram the ESP board with the edited code. This will require installing via the instructions at [ESP Core](https://github.com/espressif/arduino-esp32) via the Arduino Boards Manager. After the program has finished uploading, open up the serial monitor and press the RST button on the ESP to reboot. After a couple of seconds, if the connection is successful, the ESP should print its IP address into the serial monitor.
+To compile the program, you will need to have installed the following libraries:
+
+- [WebSocketsServer](https://github.com/Links2004/arduinoWebSockets)
+- [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
+- [AsyncTCP](https://github.com/me-no-dev/AsyncTCP)
+
+
+You will also need to intall the board through the Arduino interface using the instructions at [ESP Core](https://github.com/espressif/arduino-esp32) via the Arduino Boards Manager. After the program has finished uploading, open up the serial monitor and press the RST button on the ESP to reboot. After a couple of seconds, if the connection is successful, the ESP should print its IP address into the serial monitor.
 
 The network must run on 2.4GHz (Wi-Fi 4) to be compatible with the ESP. The network also needs to use WEP or WPA/WPA2 Personal encryption (NOT WPA Enterprise). We recommend assigning a static IP to the ESP. 
 
