@@ -13,7 +13,7 @@ Shanel Wu, Laura Devendorf, Emma Goodwill
 
 ## Setup/Installation
 
-### 1. Follow the [Installation instructions](Documentation/AFtR-InstallDirections.pdf).
+### 1. Open and follow the [Installation instructions] (Documentation/AFtR-InstallDirections.pdf).
 
 ### 2. When you get to step 3, do the following:
 
@@ -29,7 +29,7 @@ Shanel Wu, Laura Devendorf, Emma Goodwill
 
 (Optional) If you need to change the files running on the service, you can update them in the "data" folder but must follow the instructions here:
 
-- [ESP 32 File System Updates] (https://randomnerdtutorials.com/esp32-web-server-spiffs-spi-flash-file-system/)
+- [ESP 32 File System Updates](https://randomnerdtutorials.com/esp32-web-server-spiffs-spi-flash-file-system/)
 
 
 #### d. Download the Arudino code for the fabric
@@ -37,7 +37,7 @@ Download [ESPServer_WS_Fabric.ino](Release/ESPServer_WS_Fabric/ESPServer_WS_Fabr
 
 
 
-### 3. Continue [Installation instructions](Documentation/AFtR-InstallDirections.pdf)at Step 4. 
+### 3. Continue [Installation instructions](Documentation/AFtR-InstallDirections.pdf) at Step 4. 
 
 
 ## Demo
