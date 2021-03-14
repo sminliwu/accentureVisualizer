@@ -113,28 +113,28 @@ function draw() {
 
 
 
-  //top left - region 0
-  fill(getColor(4));
+  //top left - region 5 - pin 36
+  fill(getColor(5));
   rect(93,32+reg_top,pressreg_w,pressreg_h);
 
-  //top right - region 1
-  fill(getColor(5));
+  //top right - region 4 - pin 37
+  fill(getColor(4));
   rect(739,32+reg_top,pressreg_w,pressreg_h);
 
-  //middle left - region 2
+  //middle left - region 2 - pin 39 
   fill(getColor(2));
   rect(267,192+reg_top,pressreg_w,pressreg_h);
 
-  //middle right - region 3
+  //middle right - region 3 -pin 32
   fill(getColor(3));
   rect(567,192+reg_top,pressreg_w,pressreg_h);
 
-  //bottom left - region 4
+  //bottom left - region 0 - pin 33
   fill(getColor(0));
   rect(44,344+reg_top,pressreg_w,pressreg_h);
 
-  //bottom right- region 5
-  fill(getColor(1));
+  //bottom right- region 1 - pin 38
+  fill(getColor(1)); 
   rect(802,344+reg_top,pressreg_w,pressreg_h);
 
 
@@ -152,10 +152,10 @@ function draw() {
 }
 
 //for testing only - comment out on deployed version
-function mousePressed(){
-    hasData({region: Math.floor(Math.random() * 6), scale: Math.floor(Math.random() * 10)});
-    //hasData({region: 4, scale:9});
- }
+// function mousePressed(){
+//     hasData({region: Math.floor(Math.random() * 6), scale: Math.floor(Math.random() * 10)});
+//     //hasData({region: 4, scale:9});
+//  }
 
 
 function drawKey(){
@@ -251,7 +251,7 @@ function drawHistoryGraph(){
 function hasData(data){
   console.log(data);
   //data.scale will be a number from 0-10
-  color_targets[data.region] = data.scale;
+  if(data.scale > 2)  color_targets[data.region] = data.scale;
   logData(data);
 }
 

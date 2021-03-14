@@ -13,9 +13,15 @@
 #include <SPIFFS.h>
 #include <string.h>
 
-// put network information here
-const char* ssid     = "YOUR_NTWK_SSID_HERE";
-const char* password = "YOUR_NTWK_PASSWORD_HERE";
+
+////////////////////////////////////////////////////////////
+
+// put network information here - 2.4GHz (Wi-Fi 4) with WEP or WPA/WPA2 Personal encryption 
+const char* ssid     = "your wifi network name here";
+const char* password = "your wifi network password here";
+
+////////////////////////////////////////////////////////////
+
 
 const int port = 80;
 const int WSport = 81;
@@ -26,6 +32,7 @@ WebSocketsServer webSocket(WSport);
 char dataBuffer[30];
 
 //pins for force region 1-6 
+//36 is top left
 int fregs[] = {36, 37, 38, 39, 32, 33};
 
 //the sensor values on each round
@@ -38,7 +45,7 @@ int base[6];
 int max_offset = 500;
 
 //preset number of "steps" to detect in each press
-int offset_step_size = 100;
+int offset_step_size = 50;
 
 //the total number of regions on the fabric
 int num_regs = 6;
@@ -95,6 +102,7 @@ void setup() {
   Serial.println("Websocket server started.");
 
   Serial.println("calculating base values");
+  
   calculate_base_values(baseline_window);
   print_base_values();
   Serial.println("end base values");
@@ -104,6 +112,7 @@ void loop(){
   webSocket.loop();
 
   read_values();
+   //print_raw_values();
   // send values from fabric to the websocket
   print_offset_steps(); // printing has been commented out in final version
   delay(100);
