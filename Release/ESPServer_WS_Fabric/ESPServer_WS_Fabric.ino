@@ -1,10 +1,7 @@
 /*
  * Date: April 29
- * Author: Shanel/Laura
- * Project: Accenture Force Fabric
- * 
- * This code handles the web server and websockets connectivity functions of the ESP/Arduino.
- * This code compiles with Accenture_FabricSense.ino in the Arduino IDE.
+ * Variation: CHAT region test coce
+*  this version does not connect to network, it simply runs the code to test the regions directly on the arduino. 
  */
 
 #include <WiFi.h>
@@ -13,14 +10,6 @@
 #include <SPIFFS.h>
 #include <string.h>
 
-
-////////////////////////////////////////////////////////////
-
-// put network information here - 2.4GHz (Wi-Fi 4) with WEP or WPA/WPA2 Personal encryption 
-char* ssid     = "your wifi network name here";
-char* password = "your wifi network password here";
-
-////////////////////////////////////////////////////////////
 
 
 
@@ -60,67 +49,18 @@ int counter = 0;
 
 void setup() {
   Serial.begin(115200);
-  
-  if(!SPIFFS.begin()){
-    Serial.println("error occured while mounting SPIFFS");
-    return;
-  }
-  
-  Serial.println("attempting to connect to wifi");
-  
-
-  // attempt to connect to Wifi network:
-  while ( WiFi.status() != WL_CONNECTED) {
-    WiFi.begin(ssid, password);
-    Serial.println(WiFi.status());
-    // wait 10 seconds for connection:
-    delay(10000);
-  }
-  
-  
-  Serial.println("connection successful!");
-  Serial.print("server running at IP:\t");
-  Serial.print(WiFi.localIP());
-  Serial.print(":");
-  Serial.println(port);
-  
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/index.html", "text/html", false);
-  });
-  
-  // make sure there's a server.on(___) for each file in data
-  // and that there are no unused files in data to waste storage
-  server.on("/ui.js", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/ui.js", "text/javascript");
-  });
-  server.on("/client.js", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/client.js", "text/javascript");
-  });
-  server.on("/log.js", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/log.js", "text/javascript");
-  });
-
-  server.begin();
-  Serial.println("Async HTTP server started.");
-
-  webSocket.begin();
-  webSocket.onEvent(webSocketEvent);
-  Serial.println("Websocket server started.");
 
   Serial.println("calculating base values");
-  
   calculate_base_values(baseline_window);
   print_base_values();
   Serial.println("end base values");
 }
 
 void loop(){
-  webSocket.loop();
+  //webSocket.loop();
 
   read_values();
-   //print_raw_values();
-  // send values from fabric to the websocket
-  print_offset_steps(); // printing has been commented out in final version
+  print_raw_values();
   delay(100);
 }
 
