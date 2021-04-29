@@ -17,14 +17,18 @@
 ////////////////////////////////////////////////////////////
 
 // put network information here - 2.4GHz (Wi-Fi 4) with WEP or WPA/WPA2 Personal encryption 
-const char* ssid     = "your wifi network name here";
-const char* password = "your wifi network password here";
+char* ssid     = "your wifi network name here";
+char* password = "your wifi network password here";
 
 ////////////////////////////////////////////////////////////
 
 
+int keyIndex = 0; 
+
+
 const int port = 80;
 const int WSport = 81;
+
 
 AsyncWebServer server(port);
 WebSocketsServer webSocket(WSport);
@@ -64,13 +68,22 @@ void setup() {
     return;
   }
   
-  WiFi.begin(ssid, password);
+  //WiFi.begin(ssid, password);
   Serial.println("atempting to connect to wifi");
   
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-    Serial.print('.');
+//  while (WiFi.status() != WL_CONNECTED) {
+//    delay(1000);
+//    Serial.print('.');
+//  }
+
+  // attempt to connect to Wifi network:
+  while ( WiFi.status() != WL_CONNECTED) {
+    WiFi.begin(ssid, password);
+    Serial.println(WiFi.status());
+    // wait 10 seconds for connection:
+    delay(10000);
   }
+  
   
   Serial.println("connection successful!");
   Serial.print("server running at IP:\t");
