@@ -5,33 +5,44 @@ Shanel Wu, Laura Devendorf, Emma Goodwill
 
 ## Components
 - Fabric
+- Padding
 - ESP32 (ESP)
 - Tablet
+- Programming Cable (USB to MicroUSB)
+- Power Cable
 
 ## Setup/Installation
 
-### 1. Install fabric according to [wiring diagram](Documentation/wiring_diagram.pdf).
+### 1. Open and follow the [Installation instructions] (Documentation/AFtR-InstallDirections.pdf).
 
-### 2. Set up ESP with the local Wi-Fi network
+### 2. When you get to step 3, do the following:
 
-Open [ESPServer_WS_Fabric.ino](Release/ESPServer_WS_Fabric/ESPServer_WS_Fabric.ino) file in the Arduino IDE. Change SSID and password at the top of the file to your Wi-Fi network's information.
+#### a. Download the [Arduino IDE] (https://www.arduino.cc/en/software)
 
-To compile the program, you will need to have installed the following libraries:
+#### b. Install the ESP 32 Board via the Board Manager. Instructions at [ESP Core](https://github.com/espressif/arduino-esp32)
+
+#### c. Install the the following libraries:
 
 - [WebSocketsServer](https://github.com/Links2004/arduinoWebSockets)
 - [ESPAsyncWebServer](https://github.com/me-no-dev/ESPAsyncWebServer)
 - [AsyncTCP](https://github.com/me-no-dev/AsyncTCP)
 
+(Optional) If you need to change the files running on the service, you can update them in the "data" folder but must follow the instructions here:
 
-You will also need to intall the board through the Arduino interface using the instructions at [ESP Core](https://github.com/espressif/arduino-esp32) via the Arduino Boards Manager. After the program has finished uploading, open up the serial monitor and press the RST button on the ESP to reboot. After a couple of seconds, if the connection is successful, the ESP should print its IP address into the serial monitor.
+- [ESP 32 File System Updates](https://randomnerdtutorials.com/esp32-web-server-spiffs-spi-flash-file-system/)
 
-The network must run on 2.4GHz (Wi-Fi 4) to be compatible with the ESP. The network also needs to use WEP or WPA/WPA2 Personal encryption (NOT WPA Enterprise). We recommend assigning a static IP to the ESP. 
 
-### 3. Connect ESP to wall power.
+#### d. Download the Arudino code for the fabric
+Download [ESPServer_WS_Fabric.ino](Release/ESPServer_WS_Fabric/ESPServer_WS_Fabric.ino) and open it in the Arduino IDE. Change SSID and password at the top of the file to your Wi-Fi network's information. The network must run on 2.4GHz (Wi-Fi 4) to be compatible with the ESP. The network also needs to use WEP or WPA/WPA2 Personal encryption (NOT WPA Enterprise). We recommend assigning a static IP to the ESP. 
 
-### 4. Connect tablet to ESP.
 
-Connect the tablet to the same Wi-Fi network that the ESP is on. Open a browser window and go to the IP address of the ESP (the one that was printed when you booted up the ESP).
+
+### 3. Continue [Installation instructions](Documentation/AFtR-InstallDirections.pdf) at Step 4. 
+
+
+## Demo
+You can find a video demo of the fabric and visualizer on [YouTube](https://youtu.be/pV-8iuQ4Avs);
+
 
 ## User Interface and Data Logs
 The user interface client will run on the browser on your local machine. We reccomend using Google Chrome. The UI updates the visualization based on the information it receives from the ESP and writes that information to the browser's Local Storage. You can view the local storage used by opening the Chrome Code Inspector, clicking "Application", and then "Local Storage." This data is used to show the history of interactions with the fabric and will be preserved even if Chrome is closed. An explanation of the user interface features can be found [here](Documentation/ui_explained.pdf).
