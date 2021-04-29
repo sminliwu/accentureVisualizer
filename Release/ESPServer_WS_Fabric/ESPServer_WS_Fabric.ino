@@ -1,6 +1,6 @@
 /*
- * Date: Feb 14
- * Author: Shanel
+ * Date: April 29
+ * Author: Shanel/Laura
  * Project: Accenture Force Fabric
  * 
  * This code handles the web server and websockets connectivity functions of the ESP/Arduino.
@@ -22,8 +22,6 @@ char* password = "your wifi network password here";
 
 ////////////////////////////////////////////////////////////
 
-
-int keyIndex = 0; 
 
 
 const int port = 80;
@@ -68,13 +66,8 @@ void setup() {
     return;
   }
   
-  //WiFi.begin(ssid, password);
-  Serial.println("atempting to connect to wifi");
+  Serial.println("attempting to connect to wifi");
   
-//  while (WiFi.status() != WL_CONNECTED) {
-//    delay(1000);
-//    Serial.print('.');
-//  }
 
   // attempt to connect to Wifi network:
   while ( WiFi.status() != WL_CONNECTED) {
