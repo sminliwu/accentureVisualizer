@@ -1,21 +1,58 @@
 <!-- webpage hosting P5.js sketch and websocket connection -->
+<!-- Updated by laura April 29 to elliminate P5 -->
+
+
+
 
 <!DOCTYPE html>
 <html lang="">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>A Fabric that Remembers</title>
-    <style> body {padding: 0; margin: 0;} </style>
     
 </head>
-  <body>
-   <div id='sketch'></div>
+  <body id ='body'>
+   <div id='sketch'>
+
+      <div class="nav">
+        <div class="title">A Fabric That Remembers</div>
+        <div class="links">
+        <a id="past" onclick="swapToPastMode()">Past</a>
+        <a id="present" onclick="swapToPresentMode()">Present</a>
+        </div>
+      </div>
+
+      <div class="map">
+        <div class="press_row">
+          <div class="press_container top-row">
+            <div id="region_1" class="press"></div>
+            <div id="region_2" class="press"></div>
+          </div>
+        </div>
+
+        <div class="press_row">
+          <div class="press_container middle-row">
+            <div id="region_3" class="press"></div>
+            <div id="region_4" class="press"></div>
+          </div>
+        </div>
+
+       <div class="press_row">
+          <div class="press_container bottom-row">
+            <div id="region_5" class="press"></div>
+            <div id="region_6" class="press"></div>
+          </div>
+       </div>
+     </div>
+
+     <div class="key">
+      <div id="live" class="live">
+        <span>least force</span><span id="gradient"></span><span>most force</span>
+      </div>
+     </div>
  
-    <!-- P5, etc. scripts -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.14/p5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.dom.min.js"></script>
 
     <!-- Scripts in ESP file system -->
     <script src="ui.js"></script>

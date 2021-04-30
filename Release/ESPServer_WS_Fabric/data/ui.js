@@ -6,16 +6,6 @@ It also parses the log in order to draw history graphs
 */
 
 
-var c_red = 0;
-var c_white = 0;
-var c_blue = 0;
-var font = 'arial';
-var top_text_line = 30;
-var reg_top = 90;
-var  bg_fill = 255;
-var num_regions = 6;
-
-
 var  color_value = [0, 0, 0, 0, 0, 0];
 var  history_value = [0, 0, 0, 0, 0, 0];
 var  color_targets = [0,0,0,0,0,0];
@@ -25,129 +15,163 @@ var  view_mode = "present";
 var  history_resolution = 50; //adjust this if you want the history vis to be more or less detailed. 
 
 var  fp_timewindow = {
-	history: [],
-	max: 0
+  history: [],
+  max: 0
 };
 var  reg_timewindow = {
-	history: [],
-	max: 0
+  history: [],
+  max: 0
 };
 
 var oldest_stamp = 0;
 var newest_stamp =  0;
 
-function setup() {
-
-   c_red = color(255, 0, 0);
-   c_white = color(255, 255, 255);
-   c_blue = color(11,66,110);
-
-  createCanvas(1024,768);
-
-  noFill();
-  stroke(c_red);
-  rect(0, 0, 1024, 768);
-  history_slider = createSlider(0, history_resolution, history_resolution, 1);
-  history_slider.position(30, 700);
-  history_slider.style("width", "880px");
-  history_slider.hide();
-
-  title = createDiv("A Fabric that Remembers");
-  title.style('font-family', font);
-  title.style('font-size', '24px');
-   title.style('color', '#f00');
-  title.position(30, 50);
 
 
-  button_past = createButton('history');
-  button_past.position(780, 50);
-  button_past.mousePressed(swapToPastMode);
-  button_past.size(100,30);
-  button_past.style("background-color", "#fff");
-  button_past.style("border", "thin solid #f00")
-  button_past.style("color", "#f00");
-  button_past.style('font-family', font);
-  button_past.style('font-size', '14px');
+window.onload = function() {
+ const body = document.getElementById('sketch'); 
+
+ body.onclick = function changeContent() {
+    var r = Math.floor(Math.random()*6);
+    var val = Math.floor(Math.random()*10);
+
+    var e = {
+      data: "{"+r+", "+val+"}"
+    };
+
+    var dataArray = parseData(e.data);
+    console.log('Region: ', dataArray[0], ', Value: ', dataArray[1]);
+    if (dataArray[1] > 0) {
+      hasData({region: dataArray[0], scale: dataArray[1]});
+    }
+  }
+
+
+  window.requestAnimationFrame(draw);
+
+};
 
 
 
-  button_present = createButton('live');
-  button_present.position(900, 50);
-  button_present.mousePressed(swapToPresentMode);
-  button_present.size(100,30);
-  button_present.style("border", "thin solid #f00")
-  button_present.style("background-color", "#f00");
-  button_present.style("color", "#fff");
-  button_present.style('font-family', font);
-  button_present.style('font-size', '14px');
+// function draw(timestamp) {
+//   if (start === undefined)
+//     start = timestamp;
+//   const elapsed = timestamp - start;
 
-}
+//   // `Math.min()` is used here to make sure that the element stops at exactly 200px.
+//   element.style.transform = 'translateX(' + Math.min(0.1 * elapsed, 200) + 'px)';
+
+//   if (elapsed < 2000) { // Stop the animation after 2 seconds
+//     window.requestAnimationFrame(step);
+//   }
+// }
 
 
 
 
-function draw() {
+
+// function setup() {
+
+//    c_red = color(255, 0, 0);
+//    c_white = color(255, 255, 255);
+   var  c_blue = "rgb(11,66,110)";
+
+//   createCanvas(1024,768);
+
+//   noFill();
+//   stroke(c_red);
+//   rect(0, 0, 1024, 768);
+//   history_slider = createSlider(0, history_resolution, history_resolution, 1);
+//   history_slider.position(30, 700);
+//   history_slider.style("width", "880px");
+//   history_slider.hide();
+
+//   title = createDiv("A Fabric that Remembers");
+//   title.style('font-family', font);
+//   title.style('font-size', '24px');
+//    title.style('color', '#f00');
+//   title.position(30, 50);
+
+
+//   button_past = createButton('history');
+//   button_past.position(780, 50);
+//   button_past.mousePressed(swapToPastMode);
+//   button_past.size(100,30);
+//   button_past.style("background-color", "#fff");
+//   button_past.style("border", "thin solid #f00")
+//   button_past.style("color", "#f00");
+//   button_past.style('font-family', font);
+//   button_past.style('font-size', '14px');
+
+
+
+//   button_present = createButton('live');
+//   button_present.position(900, 50);
+//   button_present.mousePressed(swapToPresentMode);
+//   button_present.size(100,30);
+//   button_present.style("border", "thin solid #f00")
+//   button_present.style("background-color", "#f00");
+//   button_present.style("color", "#fff");
+//   button_present.style('font-family', font);
+//   button_present.style('font-size', '14px');
+
+// }
+
+
+
+
+function draw(timestamp) {
+
+
+  const body = document.getElementById("body");
 
   if(view_mode == "present"){
-	  background(c_white);
-	  stroke(c_red);
+    body.style.backgroundColor = "white";
+    body.style.color = "red";
+
   }else{
-  	  background(c_blue);
-      stroke(c_white);
+
+  	 body.style.backgroundColor = c_blue;
+     body.style.color = "white";
   }
 
-  textSize(12);
-  textFont(font);
-  noFill();
-  rect(30, 100, 974, 455)
-
-  pressreg_w = 190;
-  pressreg_h = 94;
-  noStroke();
-
-
-  if(view_mode != "present"){
-	let v = history_slider.value();
-    setHistoryColorValues(v);
-  }
-
-
-
-  //top left - region 5 - pin 36
-  fill(getColor(5));
-  rect(93,32+reg_top,pressreg_w,pressreg_h);
-
-  //top right - region 4 - pin 37
-  fill(getColor(4));
-  rect(739,32+reg_top,pressreg_w,pressreg_h);
-
-  //middle left - region 2 - pin 39 
-  fill(getColor(2));
-  rect(267,192+reg_top,pressreg_w,pressreg_h);
-
-  //middle right - region 3 -pin 32
-  fill(getColor(3));
-  rect(567,192+reg_top,pressreg_w,pressreg_h);
-
-  //bottom left - region 0 - pin 33
-  fill(getColor(0));
-  rect(44,344+reg_top,pressreg_w,pressreg_h);
-
-  //bottom right- region 1 - pin 38
-  fill(getColor(1)); 
-  rect(802,344+reg_top,pressreg_w,pressreg_h);
-
-
-
-  //draw the information under the region visualization
-
-
-  if(view_mode != "present"){
-		drawHistoryGraph();
-  }else{
-    drawKey();
-   }
   
+
+  if(view_mode != "present"){
+	// let v = history_slider.value();
+ //    setHistoryColorValues(v);
+  }
+
+
+  const r1 = document.getElementById('region_1');
+  r1.style.backgroundColor = getColor(5);
+
+  const r2 = document.getElementById('region_2');
+  r2.style.backgroundColor = getColor(4);
+
+  const r3 = document.getElementById('region_3');
+  r3.style.backgroundColor = getColor(2);
+
+  const r4 = document.getElementById('region_4');
+  r4.style.backgroundColor = getColor(3);
+
+  const r5 = document.getElementById('region_5');
+  r5.style.backgroundColor = getColor(0);
+
+  const r6 = document.getElementById('region_6');
+  r6.style.backgroundColor = getColor(1);
+
+
+  // //draw the information under the region visualization
+
+
+  // if(view_mode != "present"){
+		// drawHistoryGraph();
+  // }else{
+  //   drawKey();
+  //  }
+  
+  window.requestAnimationFrame(draw);
 
 }
 
@@ -271,11 +295,13 @@ function getColor(region){
        working_colors[region] -= 5;
     }
 
+    var opacity = (working_colors[region]+5)/255;
+
 
   if(view_mode == "present"){
-    return color(255,0,0, working_colors[region]+5);
+    return "rgba(255,0,0,"+opacity+")";
   }else{
-    return color(255, 255, 255,working_colors[region]+5);
+    return "rgba(255, 255, 255,"+opacity+")";
   }
 
 }
@@ -311,6 +337,9 @@ function getColor(region){
 
  function loadHistory(){
 
+  const hs = document.getElementById("history_slider");
+
+
  	reg_timewindow.history = [];
  	reg_timewindow.max = 0;
 
@@ -341,6 +370,7 @@ function getColor(region){
    var d_log = [];
    d_log = loadRawLog();
 
+   console.log(d_log);
 
 	oldest_stamp = d_log[0].timestamp;
    	newest_stamp =   d_log[0].timestamp
@@ -410,6 +440,8 @@ function getColor(region){
 
 function setHistoryColorValues(time){
 
+
+
 	history_value = [0,0,0,0,0,0];
 	var ndx = 0;
 
@@ -426,42 +458,56 @@ function setHistoryColorValues(time){
 }
 
 function swapToPastMode() {
+
   view_mode = "past";
-  bg_fill = color(255,106,91);
 
-  button_past.style('background-color', "#fff");
-  button_past.style('color', "#0b426e");
-  button_past.style("border", "thin solid #fff")
-
-  button_present.style('background-color', "#0b426e");
-  button_present.style('color', "#fff");
-  button_present.style("border", "thin solid #fff")
-
-  title.style('color', "#fff");
+  const body = document.getElementById("body");
+  const button_present = document.getElementById("present");
+  const button_past = document.getElementById("past");
+  const live = document.getElementById("live");
 
 
-  history_slider.show();
+  live.style.display = "none";
+
+  body.style.backgroundColor = c_blue;
+  body.style.color = "white";
+
+
+  button_present.style.backgroundColor = "#0b426e";
+  button_present.style.color="white";
+  button_present.style.border = "thin solid white";
+
+  button_past.style.backgroundColor = "white";
+  button_past.style.color="#0b426e";
+  button_past.style.border = "thin solid white";
+
+
 
   loadHistory();
 
 }
 
 function swapToPresentMode(){
-  history_slider.hide();
-  view_mode = "present";
-  bg_fill = 255;
 
+  console.log("to present");
 
-  button_present.style('background-color', "#f00");
-  button_present.style('color',  "#fff");
-  button_present.style("border", "thin solid #f00")
+  const body = document.getElementById("body");
+  const button_present = document.getElementById("present");
+  const button_past = document.getElementById("past");
+  const live = document.getElementById("live");
 
-  button_past.style('background-color', "#fff");
-  button_past.style('color', "#f00");
-  button_past.style("border", "thin solid #f00")
+  live.style.display = "flex";
 
-  title.style('color', "#f00");
+  body.style.backgroundColor = "#ffffff";
+  body.style.color = "red";
+ 
+  button_present.style.backgroundColor = "red";
+  button_present.style.color="white";
+  button_present.style.border = "thin solid red";
 
+  button_past.style.backgroundColor = "white";
+  button_past.style.color="red";
+  button_past.style.border = "thin solid red";
 
 }
 

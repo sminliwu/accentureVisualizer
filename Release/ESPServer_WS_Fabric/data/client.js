@@ -4,25 +4,25 @@
  * Desc: This code opens the websocket connection between client and server, and parses any incoming data from the server + fabric
  */
 
-console.log("I'm here");
 
-var connection = new WebSocket('ws://'+ location.hostname +':81/', ['arduino']);
-  connection.onopen = function () {
-    connection.send('Connect ' + new Date());
-  };
-  connection.onerror = function (error) {
-    console.log('WebSocket Error ', error);
-  };
-  connection.onmessage = function (e) {
-    var dataArray = parseData(e.data);
-    console.log('Region: ', dataArray[0], ', Value: ', dataArray[1]);
-    if (dataArray[1] > 0) {
-      hasData({region: dataArray[0], scale: dataArray[1]});
-    }
-  };
-  connection.onclose = function () {
-    console.log('WebSocket connection closed');
-  };
+// var connection = new WebSocket('ws://'+ location.hostname +':81/', ['arduino']);
+//   connection.onopen = function () {
+//     connection.send('Connect ' + new Date());
+//   };
+//   connection.onerror = function (error) {
+//     console.log('WebSocket Error ', error);
+//   };
+//   connection.onmessage = function (e) {
+//     var dataArray = parseData(e.data);
+//     console.log('Region: ', dataArray[0], ', Value: ', dataArray[1]);
+//     if (dataArray[1] > 0) {
+//       hasData({region: dataArray[0], scale: dataArray[1]});
+//     }
+//   };
+//   connection.onclose = function () {
+//     console.log('WebSocket connection closed');
+//   };
+
 
 /* Expects data in the form of {%d, %d} */
 function parseData(data) {
