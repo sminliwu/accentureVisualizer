@@ -68,6 +68,9 @@ void setup() {
   
   Serial.println("attempting to connect to wifi");
   
+//  alternative way to connect
+//  if (WiFi.waitForConnectResult() != WL_CONNECTED) {
+
 
   // attempt to connect to Wifi network:
   while ( WiFi.status() != WL_CONNECTED) {
@@ -85,11 +88,22 @@ void setup() {
   Serial.println(port);
   
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/index.html", "text/html", false);
+    request->send(SPIFFS, "/index.html", "text/html");
+  });
+  
+  //added this 4-26 as a safeguard
+  server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest *request){
+    //request->send(SPIFFS, "/index.html", "text/html", false);
+    request->send(SPIFFS, "/index.html", "text/html");
   });
   
   // make sure there's a server.on(___) for each file in data
   // and that there are no unused files in data to waste storage
+
+  server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/style.css", "text/css");
+  });
+
   server.on("/ui.js", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/ui.js", "text/javascript");
   });
@@ -98,6 +112,11 @@ void setup() {
   });
   server.on("/log.js", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/log.js", "text/javascript");
+  });
+
+  //this fires when looking for something that doesn't exist
+  server.onNotFound([](AsyncWebServerRequest *request){
+  request->send(404);
   });
 
   server.begin();

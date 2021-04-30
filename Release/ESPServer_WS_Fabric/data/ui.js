@@ -9,7 +9,7 @@ It also parses the log in order to draw history graphs
 var  color_value = [0, 0, 0, 0, 0, 0];
 var  history_value = [0, 0, 0, 0, 0, 0];
 var  color_targets = [0,0,0,0,0,0];
-
+var num_regions = 6;
 var  view_mode = "present";
 
 var  history_resolution = 50; //adjust this if you want the history vis to be more or less detailed. 
@@ -138,8 +138,8 @@ function draw(timestamp) {
   
 
   if(view_mode != "present"){
-	// let v = history_slider.value();
- //    setHistoryColorValues(v);
+	 let v = history_slider.value();
+   setHistoryColorValues(v);
   }
 
 
@@ -163,75 +163,34 @@ function draw(timestamp) {
 
 
   // //draw the information under the region visualization
-
-
-  // if(view_mode != "present"){
-		// drawHistoryGraph();
-  // }else{
-  //   drawKey();
-  //  }
   
   window.requestAnimationFrame(draw);
 
 }
 
-//for testing only - comment out on deployed version
-// function mousePressed(){
-//     hasData({region: Math.floor(Math.random() * 6), scale: Math.floor(Math.random() * 10)});
-//     //hasData({region: 4, scale:9});
-//  }
-
-
-function drawKey(){
- //now create a key on the lower corner; 
-  push();
-  translate(800, 575);
-
-  fill(c_red);
-  noStroke();
-  text("least force", -70, 20);
-
-  for(var l = 0; l < 10; l++){
-      fill(255, 0, 0, l * (255/10.0));
-      rect(l*10, 0, 20, 30);
-      
-  }
-  fill(c_red);
-  text("most force", 130, 20);
-  text("http://unstable.design", -770, 20);
-
-  pop();
-}
-
 
 
 function drawHistoryGraph(){
-  	history_slider.show();
-  	var graph_h = 100;
-  	var graph_w = 880;
-  	push();
-  	translate(30, 575);
-  	stroke(c_white);
-  	noStroke();
-  	fill(c_white);
+
+    const hs = document.getElementById("history_slider");
+    const begin = document.getElementById("begin");
+    const end = document.getElementById("end");
+    const graph = document.getElementById("graph");
+   
+    hs.style.display = "flex";
 
 
   	var date_begin = new Date();
   	date_begin.setMilliseconds((oldest_stamp*1000)-Date.now());
   	var begin_str = date_begin.getMonth()+"/"+date_begin.getDate()+"/"+date_begin.getFullYear()
+    begin.innerHTML = begin_str;
 
   	var date_end = new Date();
   	date_end.setMilliseconds((newest_stamp*1000)-Date.now());
   	var end_str = date_end.getMonth()+"/"+date_end.getDate()+"/"+date_end.getFullYear()
+    end.innerHTML = end_str;
 
-  	
-  	text(date_begin, 0,  graph_h+20);
-  	text("ACTIVITY LOG", graph_w/2-55,  graph_h+20);
-  	text(date_end, graph_w-350, graph_h+20);
-
-  	fill(c_white);
-  	text("most pressed", graph_w,  10);
-  	text("least pressed", graph_w,  graph_h);
+  
 
 
 
@@ -370,10 +329,9 @@ function getColor(region){
    var d_log = [];
    d_log = loadRawLog();
 
-   console.log(d_log);
 
 	oldest_stamp = d_log[0].timestamp;
-   	newest_stamp =   d_log[0].timestamp
+  newest_stamp =   d_log[0].timestamp
 
 	for(var d in d_log){
 		if(d_log[d].timestamp > newest_stamp) newest_stamp = d_log[d].timestamp;
@@ -465,9 +423,11 @@ function swapToPastMode() {
   const button_present = document.getElementById("present");
   const button_past = document.getElementById("past");
   const live = document.getElementById("live");
+  const map = document.getElementById("map");
 
 
   live.style.display = "none";
+  map.style.border= "1px solid white";
 
   body.style.backgroundColor = c_blue;
   body.style.color = "white";
@@ -484,6 +444,8 @@ function swapToPastMode() {
 
 
   loadHistory();
+  drawHistoryGraph();
+
 
 }
 
@@ -495,8 +457,10 @@ function swapToPresentMode(){
   const button_present = document.getElementById("present");
   const button_past = document.getElementById("past");
   const live = document.getElementById("live");
+  const map = document.getElementById("map");
 
   live.style.display = "flex";
+  map.style.border= "1px solid red";
 
   body.style.backgroundColor = "#ffffff";
   body.style.color = "red";

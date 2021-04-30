@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <div class="map">
+      <div class="map" id="map">
         <div class="press_row">
           <div class="press_container top-row">
             <div id="region_1" class="press"></div>
@@ -51,7 +51,22 @@
       <div id="live" class="live">
         <span>least force</span><span id="gradient"></span><span>most force</span>
       </div>
-     </div>
+
+      <div id="history_slider" class="history_slider" onmousemove="updateSlider()">
+            <div class="graph_row">
+              <div id="graph" class="graph">
+                <!--activity graph divs appended here-->
+              </div>
+              <div class="y-lables">
+                  <div class="most-pressed">MOST PRESSES</div>
+                  <div class="least-pressed">FEWEST PRESSES</div>
+              </div>
+            </div>
+            <div class="graph_key">
+              <span id="begin"></span><span>ACTIVITY LOG</span><span id="end"></span>
+            </div>
+          </div>
+      </div>
  
 
     <!-- Scripts in ESP file system -->

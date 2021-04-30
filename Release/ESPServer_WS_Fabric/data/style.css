@@ -132,6 +132,34 @@ div{
 
 }
 
+.history_slider{
+	display: none;
+	flex-direction: column;
+}
+
+.graph_row{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.graph{
+	width: 80%;
+	display: flex;
+	flex-direction: row;
+}
+
+.y-labels{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+
+
+
+
+
 .live{
 	display: flex;
 }

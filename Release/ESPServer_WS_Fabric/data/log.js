@@ -118,7 +118,7 @@ function loadRawLog(){
 
 	for(var x in localStorage) {
 		if(typeof(localStorage[x]) == "string"){
-			time_region = split(x, ":")
+			time_region = x.split(":")
 			value = localStorage[x];
 
 			d_log.push({
