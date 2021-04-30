@@ -48,10 +48,9 @@ function handleMove(evt) {
 
 }
 
-
+//this generates a random press for testing
 function handleStart(evt) {
   evt.preventDefault();
-  console.log("start");
 
    var r = Math.floor(Math.random()*6);
     var val = Math.floor(Math.random()*10);

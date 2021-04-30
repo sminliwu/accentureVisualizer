@@ -6,25 +6,25 @@
 
 
 //var connection = new WebSocket('ws://'+ location.hostname +':81/', ['arduino']);
-// var connection = new WebSocket('ws://'+ location.hostname +':81/');
-//   //check this against the date object sent on teh connection to track connection time. 
-//   console.log(new Date());
-//   connection.onopen = function () {
-//     connection.send('Connect ' + new Date());
-//   };
-//   connection.onerror = function (error) {
-//     console.log('WebSocket Error ', error);
-//   };
-//   connection.onmessage = function (e) {
-//     var dataArray = parseData(e.data);
-//     console.log('Region: ', dataArray[0], ', Value: ', dataArray[1]);
-//     if (dataArray[1] > 0) {
-//       hasData({region: dataArray[0], scale: dataArray[1]});
-//     }
-//   };
-//   connection.onclose = function () {
-//     console.log('WebSocket connection closed');
-//   };
+var connection = new WebSocket('ws://'+ location.hostname +':81/');
+  //check this against the date object sent on teh connection to track connection time. 
+  console.log(new Date());
+  connection.onopen = function () {
+    connection.send('Connect ' + new Date());
+  };
+  connection.onerror = function (error) {
+    console.log('WebSocket Error ', error);
+  };
+  connection.onmessage = function (e) {
+    var dataArray = parseData(e.data);
+    console.log('Region: ', dataArray[0], ', Value: ', dataArray[1]);
+    if (dataArray[1] > 0) {
+      hasData({region: dataArray[0], scale: dataArray[1]});
+    }
+  };
+  connection.onclose = function () {
+    console.log('WebSocket connection closed');
+  };
 
 
 /* Expects data in the form of {%d, %d} */
