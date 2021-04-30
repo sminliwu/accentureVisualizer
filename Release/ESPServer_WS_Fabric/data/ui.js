@@ -6,6 +6,7 @@ It also parses the log in order to draw history graphs
 */
 
 
+
 var  color_value = [0, 0, 0, 0, 0, 0];
 var  history_value = [0, 0, 0, 0, 0, 0];
 var  color_targets = [0,0,0,0,0,0];
@@ -27,6 +28,7 @@ var  reg_timewindow = {
 
 var oldest_stamp = 0;
 var newest_stamp =  0;
+var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug","Sept","Oct","Nov","Dec"];
 
 
 function handleMove(evt) {
@@ -50,8 +52,9 @@ function handleMove(evt) {
 
 //this generates a random press for testing
 function handleStart(evt) {
-  evt.preventDefault();
+    console.log("hi");
 
+  evt.preventDefault();
    var r = Math.floor(Math.random()*6);
     var val = Math.floor(Math.random()*10);
 
@@ -70,6 +73,7 @@ function handleStart(evt) {
 }
 
 window.onload = function() {
+ 
  const body = document.getElementById('sketch'); 
 
 
@@ -77,9 +81,8 @@ window.onload = function() {
   hs.addEventListener("touchmove", handleMove, false);
 
 
-  var map = document.getElementById("map");
-  map.addEventListener("touchstart", handleStart, false);
-
+ // var map = document.getElementById("map");
+ // map.addEventListener("touchstart", handleStart, false);
 
   window.requestAnimationFrame(draw);
 
@@ -124,7 +127,7 @@ function draw(timestamp) {
 }
 
 
-
+/*updated to new date format */
 function drawHistoryGraph(){
 
     clearHistoryGraph();
@@ -136,15 +139,18 @@ function drawHistoryGraph(){
    
     hs.style.display = "flex";
 
-
   	var date_begin = new Date();
-  	date_begin.setMilliseconds((oldest_stamp*1000)-Date.now());
-  	var begin_str = date_begin.getMonth()+"/"+date_begin.getDate()+"/"+date_begin.getFullYear()
+    var date_end = new Date();
+
+    if(oldest_stamp !== 0){
+        date_begin.setMilliseconds((oldest_stamp*1000)-Date.now());
+        date_end.setMilliseconds((newest_stamp*1000)-Date.now());
+    }
+
+  	var begin_str =date_begin.getDate()+"-"+ months[date_begin.getMonth()]+"-"+date_begin.getFullYear();
     begin.innerHTML = begin_str;
 
-  	var date_end = new Date();
-  	date_end.setMilliseconds((newest_stamp*1000)-Date.now());
-  	var end_str = date_end.getMonth()+"/"+date_end.getDate()+"/"+date_end.getFullYear()
+  	var end_str = date_end.getDate()+"-"+ months[date_end.getMonth()]+"-"+date_end.getFullYear();
     end.innerHTML = end_str;
 
   
@@ -177,7 +183,6 @@ function clearHistoryGraph(){
       while (graph.firstChild) {
         graph.removeChild(graph.firstChild);
      }
-     console.log("graph", graph.children);
 }
 
 
@@ -185,7 +190,7 @@ function clearHistoryGraph(){
 
 //this is called from the web socket each time a region has a non-zero value to report
 function hasData(data){
-  console.log(data);
+  console.log("has-data", data);
   //data.scale will be a number from 0-10
   if(data.scale > 2)  color_targets[data.region] = data.scale;
   logData(data);
