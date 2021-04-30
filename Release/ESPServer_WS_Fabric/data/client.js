@@ -5,7 +5,10 @@
  */
 
 
-// var connection = new WebSocket('ws://'+ location.hostname +':81/', ['arduino']);
+//var connection = new WebSocket('ws://'+ location.hostname +':81/', ['arduino']);
+// var connection = new WebSocket('ws://'+ location.hostname +':81/');
+//   //check this against the date object sent on teh connection to track connection time. 
+//   console.log(new Date());
 //   connection.onopen = function () {
 //     connection.send('Connect ' + new Date());
 //   };

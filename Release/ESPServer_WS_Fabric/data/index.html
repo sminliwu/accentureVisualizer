@@ -47,24 +47,27 @@
        </div>
      </div>
 
-     <div class="key">
+     <div class="key" id="key">
       <div id="live" class="live">
         <span>least force</span><span id="gradient"></span><span>most force</span>
       </div>
+    </div>
 
-      <div id="history_slider" class="history_slider" onmousemove="updateSlider()">
-            <div class="graph_row">
-              <div id="graph" class="graph">
-                <!--activity graph divs appended here-->
-              </div>
-              <div class="y-lables">
-                  <div class="most-pressed">MOST PRESSES</div>
-                  <div class="least-pressed">FEWEST PRESSES</div>
-              </div>
+
+    <div id="history_slider" class="history_slider">
+          <div class="graph_row">
+            <div id="graph" class="graph">
+              <!--activity graph divs appended here-->
             </div>
-            <div class="graph_key">
-              <span id="begin"></span><span>ACTIVITY LOG</span><span id="end"></span>
+            <div class="y-lables">
+                <div class="most-pressed">more presses</div>
+                <div class="least-pressed">less presses</div>
             </div>
+          </div>
+          <div class="grpah_row graph_key">
+            <div id="begin"></div>
+            <div style="text-align: center">ACTIVITY LOG</div>
+            <div id="end"></div>
           </div>
       </div>
  

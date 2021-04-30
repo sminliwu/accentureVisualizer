@@ -11,6 +11,8 @@ var  history_value = [0, 0, 0, 0, 0, 0];
 var  color_targets = [0,0,0,0,0,0];
 var num_regions = 6;
 var  view_mode = "present";
+var  c_blue = "rgb(11,66,110)";
+var  history_position = 50;
 
 var  history_resolution = 50; //adjust this if you want the history vis to be more or less detailed. 
 
@@ -27,12 +29,31 @@ var oldest_stamp = 0;
 var newest_stamp =  0;
 
 
+function handleMove(evt) {
 
-window.onload = function() {
- const body = document.getElementById('sketch'); 
+  var hs = document.getElementById("history_slider");
 
- body.onclick = function changeContent() {
-    var r = Math.floor(Math.random()*6);
+  evt.preventDefault();
+
+  let seg = 0;
+  let offset = evt.touches[0].clientX - hs.offsetLeft;
+  if(offset > 0){
+    seg = Math.floor(offset / history_resolution);
+  }
+
+  if(offset > hs.offsetWidth) seg = 50;
+
+  history_position = seg;
+  setHistoryColorValues(seg);
+
+}
+
+
+function handleStart(evt) {
+  evt.preventDefault();
+  console.log("start");
+
+   var r = Math.floor(Math.random()*6);
     var val = Math.floor(Math.random()*10);
 
     var e = {
@@ -44,7 +65,21 @@ window.onload = function() {
     if (dataArray[1] > 0) {
       hasData({region: dataArray[0], scale: dataArray[1]});
     }
-  }
+
+
+
+}
+
+window.onload = function() {
+ const body = document.getElementById('sketch'); 
+
+
+  var hs = document.getElementById("history_slider");
+  hs.addEventListener("touchmove", handleMove, false);
+
+
+  var map = document.getElementById("map");
+  map.addEventListener("touchstart", handleStart, false);
 
 
   window.requestAnimationFrame(draw);
@@ -53,94 +88,15 @@ window.onload = function() {
 
 
 
-// function draw(timestamp) {
-//   if (start === undefined)
-//     start = timestamp;
-//   const elapsed = timestamp - start;
-
-//   // `Math.min()` is used here to make sure that the element stops at exactly 200px.
-//   element.style.transform = 'translateX(' + Math.min(0.1 * elapsed, 200) + 'px)';
-
-//   if (elapsed < 2000) { // Stop the animation after 2 seconds
-//     window.requestAnimationFrame(step);
-//   }
-// }
-
-
-
-
-
-// function setup() {
-
-//    c_red = color(255, 0, 0);
-//    c_white = color(255, 255, 255);
-   var  c_blue = "rgb(11,66,110)";
-
-//   createCanvas(1024,768);
-
-//   noFill();
-//   stroke(c_red);
-//   rect(0, 0, 1024, 768);
-//   history_slider = createSlider(0, history_resolution, history_resolution, 1);
-//   history_slider.position(30, 700);
-//   history_slider.style("width", "880px");
-//   history_slider.hide();
-
-//   title = createDiv("A Fabric that Remembers");
-//   title.style('font-family', font);
-//   title.style('font-size', '24px');
-//    title.style('color', '#f00');
-//   title.position(30, 50);
-
-
-//   button_past = createButton('history');
-//   button_past.position(780, 50);
-//   button_past.mousePressed(swapToPastMode);
-//   button_past.size(100,30);
-//   button_past.style("background-color", "#fff");
-//   button_past.style("border", "thin solid #f00")
-//   button_past.style("color", "#f00");
-//   button_past.style('font-family', font);
-//   button_past.style('font-size', '14px');
-
-
-
-//   button_present = createButton('live');
-//   button_present.position(900, 50);
-//   button_present.mousePressed(swapToPresentMode);
-//   button_present.size(100,30);
-//   button_present.style("border", "thin solid #f00")
-//   button_present.style("background-color", "#f00");
-//   button_present.style("color", "#fff");
-//   button_present.style('font-family', font);
-//   button_present.style('font-size', '14px');
-
-// }
-
-
-
 
 function draw(timestamp) {
 
+  if(view_mode != 'present'){
+    setHistoryColorValues(history_position);
+  }
+
 
   const body = document.getElementById("body");
-
-  if(view_mode == "present"){
-    body.style.backgroundColor = "white";
-    body.style.color = "red";
-
-  }else{
-
-  	 body.style.backgroundColor = c_blue;
-     body.style.color = "white";
-  }
-
-  
-
-  if(view_mode != "present"){
-	 let v = history_slider.value();
-   setHistoryColorValues(v);
-  }
 
 
   const r1 = document.getElementById('region_1');
@@ -172,6 +128,8 @@ function draw(timestamp) {
 
 function drawHistoryGraph(){
 
+    clearHistoryGraph();
+
     const hs = document.getElementById("history_slider");
     const begin = document.getElementById("begin");
     const end = document.getElementById("end");
@@ -192,39 +150,35 @@ function drawHistoryGraph(){
 
   
 
+		//draw the tick marks + bars
+  	for(var i =0; i < history_resolution; i++){
+      // console.log(fp_timewindow);
+      // console.log(fp_timewindow.history[i][6],fp_timewindow.max, graph.offsetHeight);
+       let y = fp_timewindow.history[i][6] / fp_timewindow.max * graph.offsetHeight;
+       if(y <=0) y = 10;
+       if(y >= 100) y = 90;
 
+       let div = document.createElement("div");
+       div.classList.add("graph-segment")
+       div.id = i;
+       div.style.height = "100%";
+       div.style.width = graph.offsetWidth/history_resolution+"%";
 
-	stroke(255, 255, 255, 100);
-	noFill();
+      let measure = document.createElement("div");
+      measure.classList.add("measurement");
+      measure.style.height = y+"%";
+      div.appendChild(measure);
+      graph.appendChild(div);
 
-		//draw the tick marks
-	  	push()
-		  	for(var i =0; i < history_resolution; i++){
-		  	   line(0,0, 0, graph_h);
-		  	   translate(graph_w/history_resolution, 0);
-		  	}
-	  	//line(0,0, 0, graph_h);
-	  	pop();
+  	}
+}
 
-
-	  	//draw the graph line
-	 	push()
-	 	noFill();
-	 	stroke(c_white);
-	 	var last_y = -1;
-	 	var y = 0;
-	 	translate(0, graph_h);
-
-		  	for(var i = 0; i < history_resolution; i++){
-		  		y = fp_timewindow.history[i][6] / fp_timewindow.max * graph_h;
-		  	   if(last_y != -1){
-		  	   	line(0,(1-last_y), graph_w/history_resolution, (1-y));
-		  	    translate(graph_w/history_resolution, 0);
-		  	   }
-		  	   last_y = y		  	  
-		  	}
-	  	pop();
-  	pop();
+function clearHistoryGraph(){
+      const graph = document.getElementById("graph");
+      while (graph.firstChild) {
+        graph.removeChild(graph.firstChild);
+     }
+     console.log("graph", graph.children);
 }
 
 
@@ -257,7 +211,7 @@ function getColor(region){
     var opacity = (working_colors[region]+5)/255;
 
 
-  if(view_mode == "present"){
+  if(view_mode === "present"){
     return "rgba(255,0,0,"+opacity+")";
   }else{
     return "rgba(255, 255, 255,"+opacity+")";
@@ -266,38 +220,9 @@ function getColor(region){
 }
 
 
-
-// function matchColor(region, forceData) {
-//   var transformedForce = transformForce(forceData);
-//   if (color_value[region] < (transformedForce-1)){
-//     color_value[region] +=10;
-//   } else if (color_value[region] > (transformedForce + 1)) {
-//     color_value[region] -= 10;
-//   }
-// }
-
-// function transformForce(forceData){
-//    var toScale = (1023-forceData)*0.2248289345;
-//    return int(toScale);
-// }
-
-
-
-// function clearData(){
-//   //data.scale will be a number from 0-10
-//   //must map scale to a range from 0-1023
-//   for(var i = 0; i < 6;i++){
-// 	  var color_target = 0;
-// 	  matchColor(i, color_target);
-// 	}
-// }
-
 //this loads the current log data and organizes it into structutres by region and time window for visualization
 
  function loadHistory(){
-
-  const hs = document.getElementById("history_slider");
-
 
  	reg_timewindow.history = [];
  	reg_timewindow.max = 0;
@@ -329,6 +254,7 @@ function getColor(region){
    var d_log = [];
    d_log = loadRawLog();
 
+   if(d_log.length == 0) return;
 
 	oldest_stamp = d_log[0].timestamp;
   newest_stamp =   d_log[0].timestamp
@@ -344,20 +270,18 @@ function getColor(region){
 
    	//does not require values ot be in order
    	//writes an array of [time window][region][total force within time region]
-   	for(var d in d_log){
-   		var time_diff = d_log[d].timestamp - oldest_stamp;
-   		var cur_window = int((d_log[d].timestamp - oldest_stamp) / time_window);
-
+   	
+    for(var d in d_log){
+    	var time_diff = d_log[d].timestamp - oldest_stamp;
+   		var cur_window = parseInt((d_log[d].timestamp - oldest_stamp) / time_window);
 
    		window_array = fp_timewindow.history[cur_window];
-   	   	window_array[d_log[d].region] = int(window_array[d_log[d].region]) +int(d_log[d].value);  
+   	  window_array[d_log[d].region] = parseInt(window_array[d_log[d].region]) +parseInt(d_log[d].value);  
    	   	//window_array[d_log[d].region] = int(window_array[d_log[d].region]) +1;  
 
-   	   	region_array =  reg_timewindow.history[d_log[d].region];
-   	   	region_array[cur_window] = int(region_array[d_log[d].region]) + int(d_log[d].value);
+   	  region_array =  reg_timewindow.history[d_log[d].region];
+   	  region_array[cur_window] = parseInt(region_array[d_log[d].region]) + parseInt(d_log[d].value);
    	   	//region_array[cur_window] = int(region_array[d_log[d].region]) + 1;
-
-
    	}
 
 
@@ -390,7 +314,7 @@ function getColor(region){
   //set history values to most and least pressed
   for(r in reg_timewindow.history){
   	var last_value = reg_timewindow.history[r].length - 2;
-    setHistoryColorValues(int(r), last_value);
+    setHistoryColorValues(parseInt(r), last_value);
   }
 
  }
@@ -422,7 +346,7 @@ function swapToPastMode() {
   const body = document.getElementById("body");
   const button_present = document.getElementById("present");
   const button_past = document.getElementById("past");
-  const live = document.getElementById("live");
+  const live = document.getElementById("key");
   const map = document.getElementById("map");
 
 
@@ -450,15 +374,17 @@ function swapToPastMode() {
 }
 
 function swapToPresentMode(){
+  view_mode = "present";
 
-  console.log("to present");
 
   const body = document.getElementById("body");
   const button_present = document.getElementById("present");
   const button_past = document.getElementById("past");
-  const live = document.getElementById("live");
+  const live = document.getElementById("key");
   const map = document.getElementById("map");
+  const hs = document.getElementById("history_slider");
 
+  hs.style.display = "none";
   live.style.display = "flex";
   map.style.border= "1px solid red";
 

@@ -21,7 +21,7 @@ var LOGMAX = 650000;
 
   //get date in seconds
   var timestamp = Math.floor(Date.now() / 1000);
-  timestamp = timestamp+":"+data.region
+  timestamp = "aftr:"+timestamp+":"+data.region
   let value = data.scale;
 
   let min = timestamp;
@@ -90,7 +90,6 @@ function downloadLocalStorage(){
 		if(d_log[d].timestamp < oldest_stamp) oldest_stamp = d_log[d].timestamp;
 	}
 
-   	console.log(oldest_stamp, newest_stamp);
 	let writer = createWriter(oldest_stamp+"_"+newest_stamp+".csv");
 	writer.write(["timestamp", "region", "value"]);
 	writer.write('\n');
@@ -111,7 +110,6 @@ function downloadLocalStorage(){
 //accumulated in the backgroudn that won't affect this
 function loadRawLog(){
 	//clear the log so we can load it fresh
-	console.log(Date.now());
 
 	var d_log = [];
 	//console.log(localStorage.length);
@@ -119,13 +117,14 @@ function loadRawLog(){
 	for(var x in localStorage) {
 		if(typeof(localStorage[x]) == "string"){
 			time_region = x.split(":")
-			value = localStorage[x];
-
-			d_log.push({
-			timestamp: time_region[0],
-			region: time_region[1],
-			value: value}
-		);
+			if(time_region[0].localeCompare("aftr") === 0){
+				value = localStorage[x];
+				d_log.push({
+				timestamp: time_region[1],
+				region: time_region[2],
+				value: value}
+				);
+			}
 		}
 	}
 
